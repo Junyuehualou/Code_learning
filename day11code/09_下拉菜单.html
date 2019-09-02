@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bootstrap的HTML标准模板</title>   
+        <!-- Bootstrap -->
+        <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+        <!--你自己的样式文件 -->
+        <link href="" rel="stylesheet">        
+       
+    </head>
+    <body>
+		
+		
+		<div  class="dropdown">   <!-- 外部包裹的盒子必须加上 .dropdown -->
+		
+			<!-- 必须有的 dropdown-toggle
+			事件:data-toggle=dropdown -->
+			<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">点击</button>
+			
+			<ul class="dropdown-menu">  <!-- ul必须写dropdown-menu -->
+				<li><a href="">钢铁侠</a></li>
+				<li><a href="">蜘蛛侠</a></li>
+				<li><a href="">毒液</a></li>
+			</ul>
+			
+			
+		</div>
+		
+		
+		
+        <!-- 如果要使用Bootstrap的js插件，必须先调入jQuery -->
+        <script src="jQuery/jquery-1.12.4.min.js"></script>
+        <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
+        <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script> 
+    </body>
+</html>
