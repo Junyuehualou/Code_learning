@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% from 'macro/macro.html' import movie_or_tv_list %}
 
-</body>
-</html>
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="css/item.css") }}">
+    <style>
+        .content{
+            padding: 25px 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        {% for movie in items %}
+            {{ movie_or_tv_list(movie,category) }}
+        {% endfor %}
+    </div>
+
+{% endblock %}
