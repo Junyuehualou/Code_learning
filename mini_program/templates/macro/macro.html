@@ -1,0 +1,59 @@
+{% macro movie_tv_list(title, items, category)%}
+     <div class="list-group">
+        <div class="group-top">
+{#            这里的title 表示 电影或者电视剧  #}
+            <span class="group-title">{{ title }}</span>
+{#            这里表示的是 更多   跳到  电影电视剧的列表页  传分类参数   也就是传1 或者2  #}
+            <a href="{{ url_for('item_list',category=category) }}" class="more-btn">更多</a>
+        </div>
+
+        <div class="any-group">
+{#        电影 电视剧 分别 取前三个 展示#}
+            {% for item in items[0:3] %}
+{#                具体展示 调用下面的 展示方法#}
+                {{ movie_or_tv_list(item,category) }}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endmacro %}
+
+
+{% macro movie_or_tv_list(item, category) %}
+    <div class="item-group">
+        <a href="{{ url_for('detail',category=category,id=item.id) }}"><img class="thumbnail" src="{{ item.thumbnail }}" alt=""></a>
+        <p class="item-title">{{ item.title|truncate(6) }}</p>
+        {{ itemRating(item.rating) }}
+    </div>
+
+{% endmacro %}
+
+{#rating = 7.3 #}
+{#rating = 6#}
+{#int(rating) % 2 = 1#}
+
+
+{% macro itemRating(rating) %}
+
+    <p class="item-rating">
+
+    {% set light = (((rating | int) / 2) | int) %}
+    {% set half_light = (((rating | int) % 2) | int) %}
+    {% set gray = (5 - light - half_light) %}
+
+    {% for i in range(light) %}
+        <img src="{{ url_for('static',filename="image/rate_light.png") }}" alt="">
+    {% endfor %}
+
+    {% for i in range(half_light) %}
+        <img src="{{ url_for('static',filename="image/rate_half.png") }}" alt="">
+    {% endfor %}
+
+    {% for i in range(gray) %}
+        <img src="{{ url_for('static',filename="image/rate_gray.png") }}" alt="">
+    {% endfor %}
+
+    {% rating %}
+
+    </p>
+{% endmacro %}
