@@ -1,0 +1,3008 @@
+# -*- encoding: utf-8 -*-
+'''目录: python笔试/
+图片名
+    题目
+'''
+
+ACWM8074.jpg
+    (3) 请简单解释Python中static method（静态方法）和class method（类方法）。并将以下代码填写完整：
+        class A(object):
+            def foo(self, x):
+                print "executing foo(%s, %s)" % (self, x)
+
+            @classmethod
+            def class_foo(cls, x):
+                 rint "executing class_foo(%s, %s)" % (cls, x)
+
+            @staticmethod
+            def static_foo(x):
+                print "executing static_foo(%s)" % x
+
+            a = A()
+            # 调用foo函数，参数传入1
+            a.foo(1)
+
+            # 调用class_foo，参数传入1
+            A.class_foo(1)
+
+            # 调用static_foo，参数传入1
+            A.static_foo(1)
+
+        静态方法：
+            当调用此方法时，不会将类的实例传递给它。
+            在类中定义的函数。
+            无需实例化类，就可以调用。它的定义在继承中，是不可变的。
+
+        类方法：
+            当调用此方法时，将函数所属的类作为第一个参数传递。
+            通过继承，可以被子类重写。
+
+
+    四、程序题
+    1、请写一个函数，用于替换某个字符串的一个或某几个字符串
+        函数原型strreplace(str, oldString, newString)
+        例如：
+        >>> pstr = "Hello World!";
+        >>> afterReplaceStr = strreplace(pstr, " World", " Tom");
+        那么afterReplaceStr的值为"Hello Tom!"
+
+        方法一：使用字符串替换
+            def strreplace_v1(msg, key, value): 
+                ''' 替换某个字符串的一个或某几个字符串 '''
+                msg.replace(key, value)
+                return msg
+
+        方法二：使用正则表达式
+            import re
+
+            def strreplace_v2(msg, key, value):
+                ''' 替换某个字符串的一个或某几个字符串 '''
+                m = re.compile(key)
+                ret = m.sub(value, msg)
+                return ret
+
+        方法三：自己写替换
+            def strreplace_v3(msg, key, value):
+                ''' 替换某个字符串的一个或某几个字符串 '''
+                n = len(key)
+
+                # 使用python的str.index()
+                # i = msg.index(key)
+
+                # 使用手写的函数
+                i = str_index(msg, key)
+
+                j = i + n
+                ret = msg[:i] + value + msg[j:]
+                return ret
+
+            def str_index(msg, key):
+                ''' 查找字符串key 在 字符串msg 中的位置
+                手写str.index()函数
+                '''
+                i = j = 0
+                n = len(msg)
+                m = len(key)
+                flag = False
+                while i < n and not flag:
+                    # 检测第0位的字母
+                    if msg[i] != key[0]:
+                        i += 1
+                    else:
+                        # 相同，检测后续字母
+                        for k in range(1, m):
+                            if msg[i+k] != key[j+k]:
+                                i += k + 1
+                                break
+                        else:
+                            # 找到
+                            return i
+                raise ValueError('substring not found')
+
+
+AEJS9168.jpg
+    1. range 和 xrange区别
+        range
+            python2 返回队列。
+            python3 返回生成器。
+                一边循环一边调用，每次只返回一个值。减少内存使用量。
+        xrange
+            python2 返回生成器。
+            python3 废弃。
+
+
+    2. 举例交集和并集
+        a = set([1, 2, 3])
+        b = set([2, 3, 4])
+        交集：
+            a & b 的结果：set([2, 3])
+        并集：
+            a | b 的结果：set([1, 2, 3, 4])
+            
+
+
+    3. type 和 instance 的区别
+        type        子类和父类，不相同
+        instance    子类和父类，相同
+
+
+    4. copy 和 deepcopy 的区别
+        copy.copy
+            浅拷贝，构造一个新的复合对象，然后只拷贝第一层的简单对象（非集合对象，例如：tuple, list, set, dict）。
+        copy.deepcopy
+            深拷贝，构造一个新的复合对象，然后递归拷贝原始对象中的数据。
+
+
+    5.
+        class A:
+            p = 1
+        class B(A):
+            pass
+        class C(A):
+            pass
+
+        1) print A.p, B.p, C.p
+            显示：1 1 1
+        2)
+            B.p = 2
+            print A.p, B.p, C.p
+            显示：1 2 1
+        注意：该代码是python2的。
+
+            
+AVKI5321.jpg
+    7. 请用python实现socket非阻塞通讯
+        服务器 for python2 (使用线程)
+            import SocketServer    
+            from SocketServer import StreamRequestHandler  
+            from time import ctime  
+              
+            host = '127.0.0.1'    
+            port = 8001  
+            addr = (host,port)  
+            BUF_SIZE = 1024  
+              
+            class Servers(StreamRequestHandler):    
+                def handle(self):  
+                    print 'connection from %s' % str(self.client_address)  
+                    #self.wfile.write('connection %s:%s at %s succeed!' % (host,port,ctime()))    
+                    while True:  
+                        try:  
+                            data = self.request.recv(1024)    
+                            if not data:     
+                                break    
+                            print "----\n%s\n[Recv]%s" % (str(self.client_address), data)  
+                            self.request.send(data)  
+                        except:  
+                            break  
+                    print "disconnect %s" % str(self.client_address)  
+                          
+            print 'server is running....'    
+            server = SocketServer.ThreadingTCPServer(addr,Servers)    
+            server.serve_forever()    
+
+        客户端 for python2
+            from socket import *    
+              
+            host = '127.0.0.1'    
+            port = 8001  
+            addr = (host,port)  
+            BUF_SIZE = 1024  
+              
+            client = socket(AF_INET,SOCK_STREAM)    
+            client.connect(addr)  
+              
+            while True:    
+                data = raw_input()    
+                if data.strip() == 'exit':    
+                    break  
+                if not data:  
+                    continue  
+                client.send('%s\r\n' % data)
+                print "send:%s" % data  
+                  
+                dataRecv = client.recv(BUF_SIZE)  
+                print "recv:%s" % dataRecv
+                  
+            client.close()
+
+
+    8. 使用一个装饰器，查看函数的运行时间，有什么作用
+        import time
+
+        def deco(func):
+            def wrapper(*args, **kwargs):
+                time_begin = time.time()
+                func(*args, **kwargs)
+                time_end = time.time()
+                t = time_end - time_begin
+                print('time is {}'.format(t))
+            return wrapper
+        装饰器的作用：
+            装饰器本质上是一个Python函数。
+            它可以让其他函数在不需要做任何代码变动的前提下增加额外功能，装饰器的返回值也是一个函数对象。
+            它经常用于有切面需求的场景，比如：插入日志、性能测试、事务处理、缓存、权限校验等场景。
+            概括的讲，装饰器的作用就是为已经存在的对象添加额外的功能。
+
+
+    9. django的MTV分别代表什么
+        Model       模型
+            数据访问层。
+            包含与数据相关的功能：
+                (1) 访问数据的方式
+                (2) 验证数据的方式
+                (3) 数据的行为
+                (4) 数据之间的关系
+        Template    模板
+            表示层。
+            包含相关的决策：
+                在网页或其它文档类型中，如何显示数据。
+        View        视图
+            业务逻辑层。
+            包含访问模型和选择适合模板的逻辑。
+            可以把视图，看作模型和模板之间的桥梁。
+
+
+BQXX7431.jpg
+    (8) 下列程序执行后的输出结果为：
+        x = 1; y = 2; z = 'a';
+        if x << 1 > 2:
+            print "X"
+        elif  x == 97:
+            print "Z"
+        else:
+            print "Y"
+        A、X    B、Y    C、Z    D、出错
+        选 B，
+        注意，该代码是python2
+
+    二、不定项选择
+        (1) 下面的函数转换哪一个是正确的（语法均正确）：
+            A. int("ABcDef");
+            B. float('5')
+            C. bool((3, 5, 7))
+            D. str(5)
+            选 BCD
+
+        (2) 下面的函数，那些会输出1,2,3三个数字：
+            A.
+                for i in range(3):
+                    print i
+            B.
+                aList = [0, 1, 2]
+                for i in aList:
+                    print i+1
+            C.
+                i = 1
+                while i < 3:
+                    print i
+                    i = i + 1
+            D.
+                for i in range(3):
+                    print i + 1
+            选 BD
+
+    三、填空题
+        (1) 以下函数需要在其中引入一个全局变量k，请填写语句：
+            def func():
+                ___________  global k
+                k = k + 1;
+
+        (2) 请把以下函数转化为Python Lambda匿名函数：
+            def add(x, y):
+                return x+y
+
+            _______________ add = lambda x, y: x + y
+
+
+BVOV6679.jpg
+>>> ================================== pass
+    4. 写一个函数，给定矩阵的长度级数n，返回一个回旋排列的数字矩阵。
+        例如：
+            n=2返回：
+                1 2
+                4 3
+            n=3返回：
+                1 2 3
+                8 9 4
+                7 6 5
+            n=4返回：
+                1   2   3   4
+                12  13  14  5
+                11  16  15  6
+                10  9   8   7
+
+
+DGWR3850.jpg
+    9. 请写出一段Python代码实现删除一个list里面的重复元素
+        def del_repeat(arr):
+            ''' 删除list里面的重复元素 '''
+            visiter = set()
+            arr_repeat = []
+            for i in range(len(arr)):
+                x = arr[i]
+                if x in visiter:
+                    arr_repeat.append(i)
+                else:
+                    visiter.add(x)
+            if arr_repeat:
+                for i in reversed(arr_repeat):
+                    del arr[i]
+
+
+    10. 创建一个装饰器把下面函數輸出的字符串首字母大写。
+        def deco(func):
+            def wrapper(*args, **kwargs):
+                msg = func(*args, **kwargs)
+                ret = msg[0].upper() + msg[1:]
+                return ret
+            return wrapper
+
+        @deco
+        def greetings(word="hi there"):
+            return word.lower()
+
+
+DNJB6571.jpg
+    2. 表达式 [1]*2 的值为（C）
+        A. [2]
+        B. [1]
+        C. [1,1]
+        D. [1,2]
+    3. 已知列表x=[1,2,3]，那么执行语句x.insert(1,4)只有，x的值为（B）
+        A. [1,2,3,4]
+        B. [1,4,2,3]
+        C. [4,3,2,1]
+        D. [4,2,3]
+    4. 已知字符串x='hello world'，那么执行语句x.replace('hello','hi')之后，x的值为（C）
+        A. 'hello world'
+        B. 'hillo world'
+        C. 'hi world'
+        D. ' world'
+
+
+DOUW1999.jpg
+    ... （一个html文档）
+    要求爬取所有的公告名称，公告时间。编写程序解析段。
+
+
+EJAD2320.jpg
+    1. 请用python语言实现如下功能：
+        给定一个数组，其中该数组中的每个元素均为字符串，删除该数组中的空白字符串。 
+        def func(arr):
+            ''' 删除arr中的空白字符串 '''
+            visiter = set()
+            arr_del = [i for i in range(len(arr)) if not arr[i]]
+            if arr_del:
+                for i in reversed(arr_del):
+                    del arr[i]
+
+
+    2. 什么是异步调用？并请用一段简单的代码（不限语言）实现异步调用。
+        异步调用
+            一个可以无需等待被调用函数的返回值就让操作继续进行的方法。
+        例子：
+            import functools
+            import time
+            import threading
+            
+            
+            def deco(func):
+                @functools.wraps(func)
+                def wrapper(*args, **kwargs):
+                    my_thread = threading.Thread(target=func, args=args, kwargs=kwargs)
+                    my_thread.start()
+                return wrapper
+            
+             
+            @deco
+            def foo(x,y):
+                c = 0
+                while c < 5:
+                    c = c + 1 
+                    print('x: {}, y: {}'.format(x, y))
+                    time.sleep(1)
+
+
+            foo(123, 456)
+
+
+>>> ================================== pass
+    3. 简述Scrapy的框架（可做图说明），及各模块的基本功能，如果没有使用过Scrapy 框架，那么挑选一个你使用过的框架进行说明。
+
+
+>>> ================================== pass
+    4. 请实现如下功能（不限语言）：给定一个无序的数值序列，找出其中第N大的数值。
+        最平常的思路是将数组排序，最快的排序是快排，然后返回已排序数组的第k个数，算法时间复杂度为O（nlogn），空间复杂度为O（1）。
+        使用快排的思想，但是每次只对patition之后的数组的一半递归，这样可以将时间复杂度将为O（n）。
+
+
+>>> ================================== pass
+    5. 二选一：
+        5.1 开发问题：如何衡量两段文本的相识度？
+        5.2 开发问题：当你值爬取数据，遇到反爬时，解决思路是什么？
+
+
+>>> ================================== pass
+FGEL4894.jpg
+    要求：
+        1. 不允许写伪代码，要求实现一个能运行的完整函数或方法
+        2. 不要使用任何语言或第三方类库自带的方法
+
+    必答题：
+        0. 定义一个哈系表的成员和方法
+
+    下面两题二选一：
+        1. 写出一个方法输出1～100之间所有的素数么（素数定义为在大于1的自然数中，除了1和它本身以外不再有其他因数，比如2,3,5都是素数，4,6都不是素数）
+        2. 计整数二进制表示中1的个数
+
+    下面两题二选一：
+        3. 给定一个整数数组，实现快速排序算法进行升序排序，比如：[2,5,8,9,3]排序后得到：[2,3,5,8,9]
+        4. 一个楼梯有N个台阶，小明从台阶最底层地面上楼梯，小明一次可最大跨3阶（也就是说每次迈步可以上1阶，2阶，或者3阶）。问小明爬上顶一共有多少中步伐组合？
+
+
+FMTN1281.jpg
+    三、算法题：
+        有两个特别大的手机号码文件，A文件包含100万个号码（每行1个手机号），B文件包含1000万个号码，请找出A，B文件中共有的手机号码。
+        （从算法和数据结构角度来思考，大数据量有性能要求，写清解决问题思路即可，可以不写详细代码）
+
+FRHK7905.jpg
+    聘请意向书
+
+FYUB1609.jpg
+    1. 有一张商品购买记录表T，其中包含字段uid（用户id），pid（商品id），现在要统计即购买了商品A（即pid为A）又购买了商品B（即pid为B）的用户uid。请写出对应的SQL语句。
+        select t01.uid
+        from (
+                select uid
+                from T
+                where T.pid = A
+            ) as t01
+        join
+            (
+                select uid
+                from T
+                where T.pid = B
+            ) as t02
+            on t01.uid = t02.uid
+        ;
+
+    2. 有两个有序整型数组：A和B，都是从小到大排序。要求把A和B合并成数组C，且C也是有序的。例如A=[1,3,5,7...]，B=[2,4,6,8...]。合并后C=[1,2,3,4,5,6,7,8...]。请写一个方法尽可能高效率的来实现（注：不调用系统提供的函数）。
+        def merge_arr(arr_a, arr_b):
+            ''' 数组合并 '''
+            i = j = 0
+            n = len(arr_a)
+            m = len(arr_b)
+            arr_c = []
+            while i < n and j < m:
+                if arr_a[i] < arr_b[j]:
+                    arr_c.append(arr_a[i])
+                    i = i + 1
+                elif arr_a[i] > arr_b[j]:
+                    arr_c.append(arr_b[j])
+                    j = j + 1
+                else:
+                    arr_c.extend([arr_a[i]] * 2)
+                    i = i + 1
+                    j = j + 1
+            if i < n:
+                arr_c.extend(arr_a[i:])
+            elif j < m:
+                arr_c.extend(arr_b[j:])
+            return arr_c
+
+
+GDZI2530.jpg
+    1. 写出20个linux命令
+        login, logout, passwd, who, su, sudo
+        date, cal, echo, alias, bg, fg, cd, dirs, eval, exec, uname,
+        ls,
+        ps, kill,
+        history,
+        less, more, cat,
+        man, info, help,
+        source, export, ln, unlink, unset, set,
+
+
+    2. 如何理解python中字符串中的\字符
+        字符串中的\，是转义字符。
+        需要中字符串中使用特殊字符时，python用用反斜杠(\)转义字符。例如：
+            \           在行尾时，是续行符
+            \\       	反斜杠符号
+            \'          单引号
+
+
+    3. 如何理解python中的深拷贝和浅拷贝
+        同 AEJS9168.jpg --> 第4题
+
+
+    4. 列表中有n个正整数，范围在[0,1000]，请编程对列表中的数据排序。
+        def sort_arr_v1(arr):
+            ''' 对列表中的数据排序，使用list.sort() '''
+            arr.sort()
+            return arr
+
+        def sort_arr_v2(arr):
+            ''' 对列表中的数据排序，使用快速排序 '''
+            _less = [] # 存储小于基准数的值
+            _greater = [] # 存储大于基准数的值
+            # 递归函数一定要有退出条件
+            if len(arr) <= 1:
+                return arr
+            # 基准数，直接获取src的最后一个
+            _pivot = arr.pop()
+            for _item in arr:
+                if _item <= _pivot:
+                    _less.append(_item)
+                else:
+                    _greater.append(_item)
+            # 这里用到了python的list是可以直接相加的特性
+            # 递归思想很重要，去处理列表中不止1个的
+            return sort_arr_v2(_less) + [_pivot] + sort_arr_v2(_greater)
+
+
+>>> ================================== pass
+    5. 列表中有n对不重复的正整数，随机取出一个数字后，编程快速找到取出的数字。如：
+        [1,3,4,2,4,1,2,3] -> [1,3,4,2,1,2,3]
+
+
+GLYV6981.jpg
+    1. 利用Python执行shell命令并取得返回结果
+        方法一：
+            import os
+
+            s_command = 'ls -ls'
+            os.system(s_command)
+        方法二：
+            import subprocess
+
+            arr_commend = ['ls', '-l']
+            ret = subprocess.run(arr_commend, stdout=subprocess.PIPE)
+            msg = ret.stdout.decode()
+            print(msg)
+
+
+    2. 用python将‘123456’反转为'654321'
+        def func(s):
+            return ''.join(reversed(list(s)))
+        
+        func('123456')
+
+
+    3. 利用python打印前一天的本地时间，格式为'2017-03-24 16:55:44'
+        import datetime
+
+        yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+        fmt = '%Y-%m-%d %H:%M:%S'
+        s = yesterday.strftime(fmt)
+        print(s)
+
+
+    4. python中search()和match()的区别
+        re.match()
+            仅在字符串的开始处检查匹配，
+        re.search()
+            检查匹配字符串中的任意位置（这是Perl默认执行的操作）。
+
+
+    5. range和xrange的区别，以及各自的适用场景
+        同 AEJS9168.jpg --> 第1题.
+
+
+    6. 什么是lambda函数，有什么好处
+        lambda函数，是一种单行的匿名函数。
+        代码更为简洁，使用函数的定义方式更为直观，易理解。
+
+
+GYKR3955.jpg
+    4. 3+4j不是合法的Python表达式。（错）
+    5. Python集合可以包含相同的元素。（错）
+    6. 在UTF-8编码中一个汉字需要占用3个字节。（错）
+        注意：
+            UTF-8 是变长的，1-6个字节。
+            少数是汉字每个占用3个字节，多数占用4个字节。
+            占用3个字节的汉字： 52156 个
+            占用4个字节的汉字： 64029 个
+    7. Python 3.x 支持使用中文作为变量名。（对）
+    8. 函数中必须包含return语句。（错）
+    9. 栈和队列的都具有先入后出的特点。（错）
+    10. 定义类时实现类__eq__()方法，该类对象即可支持运算符==。（对）
+
+    三、XPath解析题。
+        <?xml version="1.0" encoding="ISO-8859-1"?>
+        <bookstore>
+            <book>
+                <title lang="eng">Harry Potter</title>
+                <price>29.99</price>
+                <author>赵六</author>
+            </book>
+            <book>
+                <title lang="eng">Learning XML</title>
+                <price>39.95</price>
+                <author>张三</author>
+            </book>
+            <book>
+                <title lang="eng">ORACLE</title>
+                <price>40.32</price>
+                <author>Lary</author>
+            </book>
+        </bookstore>
+
+        写出表达式：
+            1. 选取bookstore元素中的book元素的所有title元素。其中的price必须大于35.00
+                /bookstore/book[price>35.00]/title
+            2. 选取属于bookstore子元素的倒数第二个book元素
+                /bookstore/book[last()-1]
+            3. 选取属于bookstore元素的后代的所有book元素，而不管它们位于...下的什么位置。
+                /bookstore/book
+            4. 选取所有带有属性的title元素
+                //title
+
+
+HOPD1716.jpg
+    一、单项选择题
+        (1) 以下叙述正确的是：d
+            a. continue语句的作用是结束整个循环的执行
+            b. 只能在循环体内和switch语句体内使用break语句
+            c. 在循环体内使用break语句或continue语句的作用相同
+            d. 从多层循环嵌套中退出时，只能使用goto语句
+        (2) Python如何定义一个函数：c
+            a. class <name>(<Type> arg1, <Type> arg2, ..., <Type> argN)
+            b. function <name>(arg1, arg2, ..., argN)
+            c. def <name>(arg1, arg2, ..., argN)
+            d. def <name>(<Type> arg1, <Type> arg2, ..., <Type> argN)
+        (3) 下面哪个函数能够在linux环境下创建一个子进程：b
+            a. os.popen
+            b. os.fork
+            c. os.system
+            d. os.link
+        (4) 已知x=43, ch='A', y=1，则表达式（x>=y and ch<'B' and y）的值是：b
+            a. 0
+            b. 1
+            c. 出错
+            d. True("真")
+        (5) 下面的语句哪个会无限循环下去：b
+            其中range函数原型为range([start], stop[, step])
+            a.
+                for a in range(10):
+                    time.sleep(10)
+            b.
+                while 1 < 10: 
+                    time.sleep(10)
+            c.
+                while True:
+                    break
+            d.
+                a = [3,-1,5,7]
+                for i in a[:]:
+                    if a > 10:
+                        break
+        (6) 下列表达式中返回为True的是：
+            a. 3 > 2 > 2
+            b. 'abc' > 'xyz'
+            c. 0x56 < 56
+            d. (3,2) < ('a','b')
+            注意：
+                python2中，d的返回是True。
+                python3中，全部返回False。
+        (7) Python不支持的数据类型有：a
+            a. char
+            b. int
+            c. float
+            d. list
+
+
+IBWF1980.jpg
+>>> ================================== pass
+    2. 平衡点问题：
+        假如一个数组中的元素，其前面的部分等于后面的部分，那么这个点的位序就是平衡点。
+        比如一个列表 numbers =
+        [1,3,5,7,8,25,4,20]。25前面的总和为24，25后面的总和也是24，那么这个点就是平衡点。
+        要求编写程序，寻找并返回任意一个列表的平衡点。
+
+
+ICUW5311.jpg
+    同GYKR3955.jpg
+
+
+JMUQ1263.jpg
+    一个html表单源码。
+
+
+KEQO0150.jpg
+    10. 在django中定义了两个模型，书籍和作者，书籍有3个字段，分别是title，author，pulish_time；作者有3个字段，分别为name，age，address，其中书籍和作者是多对多的关系，查看一个书籍的所有作者和某个作者的全部书籍。
+        book/models.py
+            from django.db import models
+
+            class Author(models.Model):
+                ''' 作者 '''
+                name = models.CharField(max_length=128, verbose_name='姓名')
+                age = models.IntegerField(verbose_name='年龄')
+                address = models.CharField(max_length=256, verbose_name='地址')
+
+            class Book(models.Model):
+                ''' 书籍 '''
+                title = models.CharField(max_length=128, verbose_name='名称')
+                pulish_time = models.DateField(verbose_name='出版时间')
+                author = models.ManyToManyField(Author)
+
+        $ ./manage.py shell
+        >>> import book.models as bm
+        # 查看一个书籍的所有作者和某个作者的全部书籍
+        >>> obj_Book = bm.Book.objects.get(pk=1)
+        >>> obj_Book.author.all()
+        >>> obj_Author = bm.Author.objects.get(pk=1)
+        >>> obj_Book.book_set.all()
+
+
+    11. 简述你使用的web框架中是如何实现MVC模式的
+        MVC 设计模式：
+            模型(M)是数据的表述。
+                它不是真正的数据，而是数据的接口。
+                使用模型从数据库中获取数据时，无需知道底层数据库错综复杂的知识。
+                模型通常还会为数据库提供一层抽象，这样同一个模型就能使用不同的数据库。
+            视图(V)是你看到的界面。
+                它是模型的表现层。
+                在电脑中，视图是你在浏览器中看到的 Web 应用的页面，或者是桌面应用的 UI。
+                视图还提供了收集用户输入的接口。
+            控制器(C)控制模型和视图之间的信息流动。
+                它通过程序逻辑判断通过模型从数据库中获取什么信息，以及把什么信息传给视图。
+                它还通过视图从用户那里收集信息，并且实现业务逻辑：变更视图，或者通过模型修改数据，或者二者兼具。
+
+        Django 严格遵守 MVC 模式，但是有自己的实现逻辑。
+        “C”部分由框架处理，多数时候，我们的工作在模型、模板和视图中，因此 Django 经常被称为 MTV 框架。
+        在 MTV 开发模式中:
+            M 表示“模型”，即数据访问层。
+                这一层包含所有与数据相关的功能：访问数据的方式、验证数据的方式、数据的行为、数据之间的关系。
+            T 表示“模板”，即表现层。
+                这一层包含表现相关的决策：在网页或其他文档类型中如何显示某个东西。
+            V 表示“视图”，即业务逻辑层。
+                这一层包含访问模型和选择合适模板的逻辑。可以把视图看做模型和模板之间的桥梁。
+
+
+    12. 简述你熟悉的ORM框架的使用机制和实现原理
+        1) 数据库连接
+        2) sql的select, insert, update, delete
+        3) 定义Field。
+        4) 定义Model，实现属性的查找。
+        5) python的元类
+            metaclass = BaseModel
+            (1) python的类映射到数据库的表
+            (2) Model的字段映射到数据表的字段
+            (3) Model的动作映射到sql语句。
+
+
+KIGR0063.jpg
+    1. python中基本数据结构的操作
+                元组        列表        字典        集合
+        -------------------------------------------------------
+        定义    元组由偏移量（位置）访问的不易变对象引用序列。
+                            列表是由偏移量（位置）访问的对象引用易变序列。
+                                        字段是由键（不是位置）访问的对象引用的易变映射，是未排序的表。
+                                                    集合是 唯一 和 一成不变 对象的易变（可改变的）和无序聚集。
+        -------------------------------------------------------
+        新增    arr = (0, 1, 2)
+                            arr = [0, 1, 2]
+                                        info = {'a': 1, 'b': 2}
+                                                    info = set([1, 2, 3])
+        -------------------------------------------------------
+        更改    -   
+                            arr[0] = 5
+                                        info['a'] = 5
+                                                    -
+        -------------------------------------------------------
+        删除    -
+                            arr.remove(1)
+                            arr.clear()
+                                        info.pop('a')
+                                        info.clear()
+                                                    info.pop()
+                                                    info.remove(1)
+
+
+    2. 下面代码执行后的结果：
+        def f(x, l=[]):
+            for i in range(x):
+                l.append(i*i)
+            print l
+        >>> f(2)
+        [0, 1]
+        >>> f(3, [3,2,1])
+        [3, 2, 1, 0, 1, 4]
+        >>> f(3)
+        [0, 1, 0, 1, 4]
+
+
+    3. 请写出一段python代码实现删除一个list里面的重复
+        同 DGWR3850.jpg --> 第9题
+
+
+    4. python代码得到列表list的交集与差集
+        交集:
+            set(arr_01) & set(arr_02)
+        差集:
+            set(arr_01) - set(arr_02)
+            或者 set(arr_02) - set(arr_01)
+
+    5. __new__和__init__的区别
+        __init__是当实例对象创建完成后被调用的，然后设置对象属性的一些初始值。
+        __new__是在实例创建之前被调用的，因为它的任务就是创建实例然后返回该实例，是个静态方法。
+
+
+    6. python中pass语句的作用是什么？
+        pass语句不会执行任何操作，一般作为占位符或者创建占位程序。
+
+
+    7. python里面如何生成随机数？
+        方法一：
+            import random
+            print(random.randint(0, 9))
+        方法二：
+            import uuid
+            print(uuid.uuid4())
+
+
+    8. python里面search和match的区别
+        同 GLYV6981.jpg --> 第4题
+
+    9. python函数中经常有*args, **kwargs这两个参数，它们是什么意思，为什么要使用它们？
+        一种答法：
+            如果我们不确定往一个函数中传入多少参数，或者我们希望以元组（tuple）或者列表（list）的形式传参数的时候，我们可以使用*args（单星号）。
+            如果我们不知道往函数中传递多少个关键词参数或者想传入字典的值作为关键词参数的时候我们可以使用**kwargs（双星号）。
+            args、kwargs两个标识符是约定俗成的用法。
+        另一种答法：
+            当函数的参数前面有一个星号*号的时候表示这是一个可变的位置参数，两个星号**表示这个是一个可变的关键词参数。
+            星号*把序列或者集合解包（unpack）成位置参数，两个星号**把字典解包成关键词参数。 
+
+
+    10. 有两个序列a, b，大小都为n，序列元素的值任意整型数，无序。
+        要求：通过交换a,b中的元素，使[序列a元素的和]与[序列b元素的和]之间的差最小。
+
+        求解思路：
+            A = sum(a) - sum(b)
+            a[i]和b[j]进行交换后：
+            A' = sum(a) - a[i] + b[j] - (sum(b) - b[j] + a[i])
+               = sum(a) - sum(b) - 2 * (a[i] - b[j])
+               = A - 2 * (a[i] - b[j])
+            设 x = a[i] - b[j]，则
+                A' = A - 2x
+                x = (A - A') / 2
+            设 0 < A，则
+                1) x = (0..A)
+                    x = A / 2，效果最好。
+                2) x 不属于(0..A)
+                    则当前的a或者b，就是答案。
+            所以算法如下：
+                在a和b中寻找使得x=(0..A)，并且最接近A/2的i和j，交换相应的i和j元素。
+                重新计算A后，重复前面的步骤，直到找不到(0..A)之间的x为止。
+
+        算法：
+            1）将2个序列合并为一个序列，并排序。为序列Source
+            2）拿出最大元素Big，次大元素Small。
+            3）在余下的序列Source[:-2]进行平分，得到序列max, min
+            4）将Small加到max序列，将Big加到min序列，重新计算序列和，和大的为max，小的为min。
+
+        def swap_balance(arr_a, arr_b):
+            ''' 通过交换a,b中的元素，使[序列a元素的和]与[序列b元素的和]之间的差最小 '''
+            N = len(arr_a)
+            sum_a = sum(arr_a)
+            sum_b = sum(arr_b)
+            # 计算序列和
+            diff = sum_a - sum_b
+            while diff != 0:
+                best_i = best_j = best_change = 0
+                for i in range(N):
+                    for j in range(N):
+                        change = arr_a[i] - arr_b[j]
+                        if abs(diff - 2 * change) < abs(diff - 2 * best_change):
+                            best_change = change
+                            best_i = i
+                            best_j = j
+                if best_change == 0:
+                    return False
+                arr_a[best_i], arr_b[best_j] = arr_b[best_j], arr_a[best_i]
+                # 重新计算序列和
+                sum_a -= best_change
+                sum_b += best_change
+                diff = sum_a - sum_b
+            return true
+
+
+    11. MyISAM和InnoDB的区别
+        1) InnoDB支持事务，MyISAM不支持
+            对于InnoDB每一条SQL语言都默认封装成事务，自动提交。
+            这样会影响速度，所以最好把多条SQL语言放在begin和commit之间，组成一个事务；
+        2) InnoDB支持外键，而MyISAM不支持。
+            对一个包含外键的InnoDB表转为MYISAM会失败；
+        3) InnoDB是聚集索引，数据文件是和索引绑在一起的，必须要有主键，通过主键索引效率很高。
+            但是辅助索引需要两次查询，先查询到主键，然后再通过主键查询到数据。
+            因此，主键不应该过大，因为主键太大，其他索引也都会很大。
+            而MyISAM是非聚集索引，数据文件是分离的，索引保存的是数据文件的指针。
+            主键索引和辅助索引是独立的。
+        4) InnoDB不保存表的具体行数，执行select count(*) from table时需要全表扫描。
+            而MyISAM用一个变量保存了整个表的行数，执行上述语句时只需要读出该变量即可，速度很快；
+        5) Innodb不支持全文索引，而MyISAM支持全文索引，查询效率上MyISAM要高；
+
+
+    12. 如何列出表'test'内name域值不为'tecmint'，web_address域值为'test.com'的所有数据？
+            select *
+            from test
+            where name != 'tecmint'
+                and web_address = 'test.com'
+            ;
+
+
+KQVM8135.jpg
+    同AVKI5321.jpg
+
+
+KTAC2428.jpg
+    1. 简述HTTP协议下，一个HTTP请求的数据结构。简述HTTP与HTTPS协议的差异。
+        HTTP请求信息包括3部分:
+            第一部分：请求行（数据包中的一行内容）
+                请求行包括三部分内容：请求方式（get/post）、请求资源路径、协议的类型与版本。
+            第二部分：若干消息头（W3C定义的一些有特殊含义的键值对）
+                消息头的样式，比如：content-type=text/html;charset=utf-8。
+                服务器端与浏览器端都会遵守这些消息头的约定，且会自动生成，也可通过编程的方式生成。
+            第三部分：实体内容。
+                如果请求方式是post方式，请求参数及值会放在这里。
+        HTTP与HTTPS协议的差异
+            https协议需要到ca申请证书，一般免费证书很少，需要交费。 
+            http是超文本传输协议，信息是明文传输，https 则是具有安全性的ssl加密传输协议。 
+            http和https使用的是完全不同的连接方式用的端口也不一样,前者是80,后者是443。 
+            http的连接很简单,是无状态的。 
+            HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议 要比http协议安全。
+
+
+    2. 字典m={"a":1, "b":2}，请用代码完成key和value的交换。
+        方法一：
+            info = {v: k for k, v in m.items()}
+        方法二：
+            m中，值有重复的。
+            import collections
+
+            info = collections.defaultdict(lsit)
+            for k, v in m.items():
+                info[v].append(k)
+
+
+    3. 当前目录下有一个5G左右大小的文件，文件中，每行一条日志，格式如下：
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 13:12:12 "a=1&b=2&c=3"
+        2017-01-01 13:12:12 "a=1&b=2&c=3"
+        2017-01-01 14:12:12 "a=1&b=2&c=3"
+        请利用你所掌握的语言，筛选出和"2017-01-01 13:12:12"有关的数据。
+        
+        代码 a01.py
+            def find_msg(f_name, msg):
+                with open(f_name) as f:
+                    for row in f:
+                        if row.startswith(msg):
+                            yield row
+
+
+            def main():
+                f_name = 'a01.log'
+                msg = "2017-01-01 13:12:12"
+                try:
+                    x = find_msg(f_name, msg)
+                    for i, s in enumerate(x):
+                        print('i: {}, s: {}'.format(i, s))
+                except Exception as e:
+                    print('e: {}'.format(e))
+            
+            if __name__ == '__main__':
+                main()
+
+
+    4. Python2和Python3的区别
+        回答一：
+            01) 默认编码
+                py2: ascii
+                py3: UTF-8 (可以使用中文变量名)
+            02) 字符串
+                py2:
+                    unicode     Unicode文本
+                    str         8位文本 和 二进制数据
+                py3:
+                    str         Unicode文本（ASCII或者其它）
+                    bytes       二进制数据（包括编码的文本）
+                    bytearray   bytes的一种可变的变体
+            03) 整数
+                py2:
+                    int 和 log
+                py3:
+                    int（支持高精度整数运算）
+            04) 1/2的结果，py2是0，py3是0.5。
+            05) py3中，!= 取代 <>
+            06) True 和 False
+                py2: 两个全局变量（名字）
+                    可以重新赋值。
+                py3: 两个关键字
+                    永远指向两个固定的对象，不允许再被重新赋值。
+            06) print，exec 不再是语句(py2)，而是函数(py3)。
+            07) py3中，以下方法返回迭代器对象：
+                range(), filter(), map(), zip(), dict.keys(), dict.values(), dict.items()等。
+            08) 迭代器 必须实现
+                py2: next()
+                py3: __next__()
+            09) import导入
+                py2: 默认使用相对路径
+                py3: 默认使用绝对路径
+            10) 类
+                py2:
+                    旧式类
+                    新式类，继承object
+                py3: 新式类
+            11) 多重继承中，搜索方法
+                py2:
+                    旧式类: 深度优先
+                    新式类: 广度优先
+                py3: 广度优先
+
+            12) 异常
+                py2:
+                    except (Exception, ValueError), e:
+                py3:
+                    except (Exception, ValueError) as e:
+        回答二：
+            作者：董伟明
+            链接：https://www.zhihu.com/question/19698598/answer/206571839
+            来源：知乎
+            
+            按照当前时间点（Python 2.7 和 Python3.6），从宏观上介绍下Python 3和Python 2的区别，并举一些对应常见的例子：
+            1. 统一了字符编码支持。
+                我特意把它拿出来放在第一条...
+            2. 增加了新的语法。
+                print/exec等成为了函数，
+                格式化字符串变量，
+                类型标注，
+                添加了nonlocal、yield from、async/await、yield for关键词
+                和__annotations__、__context__、__traceback__、__qualname__等dunder方法。
+            3. 修改了一些语法。
+                metaclass，raise、map、filter以及dict的items/keys/values方法返回迭代对象而不是列表，描述符协议，保存类属性定义顺序，保存关键字参数顺序
+            4. 去掉了一些语法。
+                cmp、<>(也就是!=)、xrange（其实就是range）、不再有经典类
+            5. 增加一些新的模块。
+                concurrent.futures、venv、unittest.mock、asyncio、selectors、typing等
+            6. 修改了一些模块。
+                主要是对模块添加函数/类/方法（如functools.lru_cache、threading.Barrier）或者参数。
+            7. 模块改名。
+                把一些相关的模块放进同一个包里面（如httplib, BaseHTTPServer, CGIHTTPServer, SimpleHTTPServer, Cookie, cookielib放进了http里面，urllib, urllib2, urlparse, robotparse放进了urllib里面），个例如SocketServer改成了socketserver，Queue改成queue等
+            8. 去掉了一些模块或者函数。
+                gopherlib、md5、contextlib.nested、inspect.getmoduleinfo等。
+                去掉的内容的原因主要是2点：
+                    1. 过时的技术产物，已经没什么人在用了；
+                    2. 出现了新的替代产物后者被证明存在意义不大。理论上对于开发者影响很小。
+            9. 优化。
+                重新实现了dict可以减少20%-25%的内存使用；
+                提升pickle序列化和反序列化的效率；
+                collections.OrderedDict改用C实现；
+                通过os.scandir对glob模块中的glob()及iglob()进行优化，使得它们现在大概快了3-6倍等.. 
+                这些都是喜大普奔的好消息，同样开发者不需要感知，默默的就会让结果变得更好。
+            10. 其他。
+                构建过程、C的API、安全性等方面的修改，通常对于开发者不需要关心。
+            最后，重提一下我经常说的那句话：Python 2/3的思想基本是共通的，只有少量的语法有差别甚至不兼容。当对Python熟悉到一定程度时， 即使只会Python 2也可以在很短的时间就能写Python 3的代码。
+
+
+    5. 影响服务器请求QPS的核心问题有哪些？
+        01) 超大内存
+        02) 使用 多进程 + 协程 + redis缓存集群
+        03) 使用CDN
+        04) 高频页码静态化(匿名用户使用静态页面)
+        05) 页面拆分
+        06) 分块缓存
+        07) 静态资源版本化
+        08) db查询用索引
+        09) 不在循环中，写查询
+        10) 释放打开的文件句柄
+        11) 大文本不要存入redis
+        12) curl请求有超时
+        13) 不同进程，写不同的日志文件
+        14) 缓存图片的尺寸
+        15) 按行读取巨大的文本文件
+        16) 使用队列异步处理发邮件，发短信
+        17) 使用hash表，查找ip黑名单和关键字
+
+
+KVLS4399.jpg
+    10. 如何使用匿名函数
+        同 GLYV6981.jpg --> 第6题
+
+
+    11. 何时使用标准库collections中的deque?
+        deque基本上实现了List的常用方法，在这个基础上又添加了它的新特性。
+        值得一提的是list的l.insert(0,v)和l.pop(0)的操作（再列表的头部进行插入或删除）的时间复杂度是0(n)，随着元素增加耗时呈线性上升的，而deque的这两个操作的时间复杂度是0(1)的。
+        所以当代码对此类操作有性能需求时，用deque再好不过了。
+
+
+    12. 标准库copy中的copy和deepcopy的区别
+        同 AEJS9168.jpg --> 第4题
+
+
+    13. 标准库re正则表达式match和search区别
+        同 GLYV6981.jpg --> 第4题
+
+
+    14. 使用正则表达式在 '''<OPTION value="待处理 ">待处理</OPTION>'''
+        字符串中，获取OPTION的value属性值。注意：OPTION中可能有其他的标签属性，
+        如：<OPTION a='x' value="待处理"> 或者 <OPTION value="待处理" b='y' >
+            >>> import re
+            >>> msg = '''<OPTION a='x' value="待处理" b="y">'''
+            >>> fmt = r'''<OPTION.*value=[\"\'](?P<value>\w*)[\"\'].*'''
+            >>> re.search(fmt, msg).groupdict()
+            {'value': '待处理'}
+
+
+    15. 如何使用标准库pdb调试Python程序
+        1) 启动
+            $ python -m pdb mymodule.py
+            or 
+            >>> import pdb
+            >>> import mymodule
+            >>> pdb.run('mymodule.test()')
+        2) 设置断点
+            pdb.set_trace()
+        3) 常用调试命令
+            h(elp) [command]
+                无参数时，打印可用命令的列表。使用命令作为参数，打印有关该命令的帮助。
+            w(here)
+                打印堆栈跟踪，最新的帧在底部。
+            d(own) [count]
+                将当前帧计数（默认一个）向下移动到堆栈跟踪（更新的帧）。
+            u(p) [count]
+                将当前帧计数（默认值）移动到堆栈跟踪（到较早的帧）。
+            b(reak) [([filename:]lineno | function) [, condition]]
+                使用lineno参数，在当前文件中设置断点。
+                使用函数参数，在该函数中的第一个可执行语句中设置断点。
+                行号可以用文件名和冒号作为前缀，以在另一个文件（可能是尚未加载的文件）中指定断点。
+                在sys.path上搜索文件。
+                请注意，每个断点都分配有一个数字，所有其他断点命令都引用该数字。
+
+                如果存在第二个参数，它是一个表达式，在断点被执行之前必须计算为true。
+
+                无参数，列出所有中断，包括每个断点，断点被命中的次数，当前忽略计数和相关条件（如果有）。 
+            tbreak [([filename:]lineno | function) [, condition]]
+                临时断点，当它第一次被击中时被自动删除。参数与break相同。
+            cl(ear) [filename:lineno | bpnumber [bpnumber ...]]
+                使用filename：lineno参数，清除此行的所有断点。用断点号的空格分隔列表，清除那些断点。没有论证，清除所有休息（但首先要求确认）。
+            disable [bpnumber [bpnumber ...]]
+                禁用以空格分隔的断点号列表形式给出的断点。禁用断点意​​味着它不能导致程序停止执行，但是与清除断点不同，它保留在断点列表中，并且可以（重新）启用。
+            enable [bpnumber [bpnumber ...]]
+                启用指定的断点。
+            ignore bpnumber [count]
+                设置给定断点号的忽略计数。如果省略count，则忽略计数设置为0。当忽略计数为零时，断点变为活动状态。当非零时，每次达到断点时计数递减，并且不禁用断点，并且任何关联条件的计算结果为true。
+            condition bpnumber [condition]
+                为断点设置新的条件，这是在断点被执行之前必须计算为true的表达式。如果条件不存在，则删除任何现有条件；即断点是无条件的。
+            commands [bpnumber]
+                指定断点号bpnumber的命令列表。命令本身显示在以下行。键入仅包含end的行以终止命令。
+            s(tep)
+                执行当前行，在第一个可能的时间停止（在调用的函数中或当前函数中的下一行）。
+            n(ext)
+                继续执行直到到达当前函数中的下一行或返回。（next和step之间的区别是step在被调用函数内停止，而next （几乎）全速，只在当前功能的下一行停止。）
+            unt(il) [lineno]
+                如果没有参数，继续执行直到到达具有大于当前数字的数字的行。
+                使用行号，继续执行，直到到达具有大于或等于的数字的行。在这两种情况下，当当前帧返回时也停止。
+                在版本3.2中更改：允许给出明确的行号。
+            r(eturn)
+                继续执行直到当前函数返回。
+            c(ont(inue))
+                继续执行，只有在遇到断点时停止。
+            j(ump) lineno
+                设置将要执行的下一行。仅在最下面的框架中可用。这允许您跳回并再次执行代码，或者向前跳转以跳过您不想运行的代码。
+                应该注意的是，不是所有的跳转都被允许 - 对于实例，不可能跳到for循环中或从finally子句。
+            l(ist) [first[, last]]
+                列出当前文件的源代码。如果没有参数，请列出当前行周围的11行或继续上一个列表。使用.作为参数，列出当前行周围的11行。使用一个参数，在该行列出11行。有两个参数，列出给定的范围；如果第二个参数小于第一个，它将被解释为计数。
+                当前帧中的当前行由->指示。如果正在调试异常，则异常最初提出或传播的行由>>指示，如果它与当前行不同。
+                版本3.2中的新功能： >>标记。
+            ll | longlist
+                列出当前函数或框架的所有源代码。有趣的行标记为list。
+            a(rgs)
+                打印当前函数的参数列表。
+            p expression
+                计算当前上下文中的表达式并打印其值。
+                注意
+                    print()也可以使用，但不是调试器命令 - 这将执行Python print()函数。
+            pp expression
+                像p命令，除了表达式的值是使用pprint模块打印的。
+            whatis expression
+                打印表达式的类型。
+            source expression
+                尝试获取给定对象的源代码并显示它。
+            display [expression]
+                如果表达式更改，则每次在当前帧中停止执行时，显示表达式的值。
+                不带表达式时，列出当前帧的所有显示表达式。
+            undisplay [expression]
+                不要在当前框架中再显示表达式。如果没有表达式，请清除当前框架的所有显示表达式。
+            interact
+                启动一个交互式解释器（使用code模块），其全局命名空间包含当前范围中找到的所有（全局和局部）名称。
+            alias [name [command]]
+                创建一个名为name的执行 命令 的别名。The command must not be enclosed in quotes. 可替换参数可由%1，%2等指示，而%*由所有参数替换。如果未给出命令，则会显示名称的当前别名。如果没有给出参数，则列出所有别名。
+                别名可以嵌套，并且可以包含可以在pdb提示符下合法输入的任何内容。请注意，内部pdb命令可以被别名覆盖。然后隐藏这样的命令，直到去除别名。别名被递归地应用于命令行的第一个字；所有其他单词在行中都是孤独的。
+             unalias name
+                删除指定的别名。
+            ！ statement
+                在当前堆栈帧的上下文中执行（一行）语句。可以省略感叹号，除非语句的第一个单词类似于调试器命令。要设置全局变量，您可以在同一行上使用global语句为赋值命令添加前缀。
+            run [args ...]
+            restart [args ...]
+                重新启动调试的Python程序。如果提供了参数，则使用shlex进行分割，并将结果用作新的sys.argv。历史，断点，动作和调试器选项被保留。restart是run的别名。
+            q(uit)
+                从调试器中退出。正在执行的程序中止。
+
+
+    16. 什么是装饰器，如何使用装饰器
+        同 AVKI5321.jpg --> 第8题
+
+
+    17. 请解释with关键字的用法
+        回答一：
+            with关键字的前提是类需要实现__enter__和__exit__
+            >>> with open("test.sh") as f:
+            ...    f.read()
+        回答二：
+            1) 术语
+                (1) 上下文管理协议（Context Management Protocol）：
+                    包含方法 __enter__() 和 __exit__()，支持该协议的对象要实现这两个方法。
+                (2) 上下文管理器（Context Manager）：
+                    支持上下文管理协议的对象，这种对象实现了 __enter__() 和 __exit__() 方法。
+                    上下文管理器定义执行 with 语句时要建立的运行时上下文，负责执行 with 语句块上下文中的进入与退出操作。
+                    通常使用 with 语句调用上下文管理器，也可以通过直接调用其方法来使用。
+                (3) 运行时上下文（runtime context）：
+                    由上下文管理器创建，通过上下文管理器的 __enter__() 和 __exit__() 方法实现。
+                    __enter__() 方法在语句体执行之前进入运行时上下文，__exit__() 在语句体执行完后从运行时上下文退出。
+                    with 语句支持运行时上下文这一概念。
+                (4) 上下文表达式（Context Expression）：
+                    with 语句中跟在关键字 with 之后的表达式，该表达式 要返回一个上下文管理器对象。
+                (5) 语句体（with-body）：
+                    with 语句包裹起来的代码块。
+                    在执行语句体之前会调用上下文管理器的 __enter__() 方法，执行完语句体之后会执行 __exit__() 方法。
+            2) with 语句的语法格式如下：
+                with context_expression [as target(s)]:
+                    with-body
+            3) 例子: 使用 with 语句操作文件对象
+                with open(r'somefileName') as somefile:
+                    for line in somefile:
+                        print line
+                        # ...more code
+
+
+    18. 参数传递使用的是传递引用还是传递值？为什么？
+        1) 不可变对象作为函数参数，相当于C系语言的值传递。 
+        2) 可变对象作为函数参数，相当于C系语言的引用传递。
+
+        python中的变量是没有类型的，我们可以把它看做一个(*void)类型的指针，变量是可以指向任何对象的，而对象才是有类型的。 
+        而且Python中的对象有不可变对象（number，string，tuple等）和可变对象之分（list，dict等）。 
+        Python中函数参数的传递，是传递变量的值。 
+
+        Python 中一切皆为对象，数字是对象，列表是对象，函数也是对象，任何东西都是对象。
+        而变量是对象的一个引用（又称为名字或者标签），对象的操作都是通过引用来完成的。
+        如果函数收到的是一个可变对象（比如字典或者列表）的引用，就能修改对象的原始值－－相当于通过“传引用”来传递对象。
+        如果函数收到的是一个不可变对象（比如数字、字符或者元组）的引用，就不能直接修改原始对象－－相当于通过“传值'来传递对象。
+
+
+    19. 在类的方法定义中，'self'是怎样的一个参数
+        Python中，类的方法与普通的函数只有一个特别的区别————它们必须有一个额外的第一个参数名称。
+        但是在调用这个方法的时候，你不为这个参数赋值，Python会提供这个值。
+        这个特别的变量指对象本身，按照惯例它的名称是self。
+        当然我们也可以用其他任何名称来代替，只是规范和标准在那建议我们一致使用self。
+        self在Python里不是关键字。
+        self代表当前对象的地址。
+        self能避免非限定调用造成的全局变量。
+        例子：
+            创建了一个类MyClass，实例化 MyClass 得到了 obj 这个对象。
+            然后调用这个对象的方法 obj.method(arg1, arg2)。
+            这个过程中，Python 会自动转为 obj.mehod(MyObject, arg1, arg2)。
+
+
+    20. 说明CPython的内存管理机制
+        链接：https://python.freelycode.com/contribution/detail/511
+        译者：hubaoquan 
+        来源：python部落
+        英文原文：https://medium.com/@nvdv/cpython-memory-management-479e6cd86c9#.sbvb0py87
+
+        引用计数
+            每一个Python对象都有一个引用计数器----用于记录有多少其他对象指向(引用)这个对象。它存储在变量 refcnt 中，并通过调用C宏Py_INCREF实现引用计数增加和Py_DECREF实现引用计数减少的操作。 Py_DECREF更复杂点，当引用计数器到零时，它会运行该对象的释放函数，回收该类型的对象。
+            通常以下两种情况你需要考虑这个宏定义：实现自己创建数据结构，或者修改已经存在的Python C API。如果你使用Python内置的数据结构，那么不需要任何操作。
+            如果想不增加引用计数,可以使用弱引用或 weakrefs 引用对象。 Weakrefs对于实现缓存和代理非常有用。
+        垃圾回收（GC）
+            引用计数是在Python 2.0之前管理对象生命周期的唯一方法。它有一个弱点，它不能删除循环引用的对象。 循环引用的最简单的例子是对象引用自身。
+        >>> arr = []
+        >>> arr.append(arr)
+        >>> del arr
+        通常情况下，可以避免使用循环引用对象，但是有时是不可避免的(例如：长时间运行的程序)。
+        为了解决这个问题，Python 2.0引入了新的垃圾回收机制。
+
+        新GC与其他语言运行时（如JVM和CLR）的GC的主要区别在于，它仅用于寻找存在引用计数的循环引用。
+
+        循环引用只能由容器对象创建，因此Python GC不会跟踪整数，字符串等类型。
+
+        GC将对象分为3代，每一代对象都有一个计数器和一个阈值。
+        当对象被创建时，阈值会被自动地指派为0，也就是第0代对象。
+        当计数器大于某个阀值，GC就会运行在当前对象代上，回收该对象。
+        没被回收的对象会被移至下一代，并且将相应的计数器复位。
+        下一代的对象保留在下一代。
+
+        注：
+            分代回收
+            Python将所有的对象分为0，1，2三代。
+            所有的新建对象都是0代对象。
+            当某一代对象经历过垃圾回收，依然存活，那么它就被归入下一代对象。
+            垃圾回收启动时，一定会扫描所有的0代对象。
+            如果0代经过一定次数垃圾回收，那么就启动对0代和1代的扫描清理。
+            当1代也经历了一定次数的垃圾回收后，那么会启动对0，1，2，即对所有对象进行扫描。
+            链接：http://www.cnblogs.com/vamei/p/3232088.html
+
+        在Python 3.4之前，GC有一个致命缺点----每个对象重载了__del__()方法。
+        因为每个对象都可以相互引用，所以GC不知道该调用那个对象的__del__()方法，这会导致GC直接跳过这些对象。
+        具体详细信息可以参考 gc.garbage (https://docs.python.org/2/library/gc.html#gc.garbage) 并且循环引用需要编程人员手动打破。
+
+        Python3.4介绍了一种最终的解决方法finalization approach (https://docs.python.org/3/whatsnew/3.4.html#whatsnew-pep-442)，现在的GC可以打破对象的循环引用，而不在使用gc.garbage介绍的方法去回收对象。
+
+        此外，值得一提的是，如果你确定你的代码没有创建循环引用（或者你不关心内存管理），那么你可以只依赖引用计数器自动管理内存，而不使用GC去管理内存。
+
+
+MTNV0210.jpg
+    1. 使用python将字符串"1.2.3.4.5"转换为字符串"5|4|3|2|1"
+        >>> msg = '1.2.3.4.5'
+        >>> ''.join(reversed(list(msg.replace('.', '|'))))
+        '5|4|3|2|1'
+
+
+    2. 请分别描述Python2.x和Python3.x中，import包时的路径搜索顺序
+        import包时的路径搜索 sys.path:
+            1) 程序的主目录(包内导入)
+            2) PYTHONPATH目录（如果已经进行了设置）
+            3) 标准链接库目录
+            4) 如何.pth文件的目录（如果存在的话）
+        其中 包内导入 的方式：
+            py2 包内导入:
+                1) 当前目录
+                2) 上一个目录
+                3) 找不到，再往上找
+            py3 包内导入:
+                1) 绝对导入（默认）
+                    跳过当前包，然后搜索sys.path。
+                2) 相对导入
+                    先包内，再包外。
+
+
+    3. 用Python的正则表达式匹配时间信息
+        >>> import datetime
+        >>> import re
+        >>> msg = datetime.datetime.now().isoformat()
+        '2018-06-13T20:32:42.271286'
+        >>> fmt = r'''(?P<year>\d+)-(?P<month>\d+)-(?P<day>\d+)T(?P<hour>\d+):(?P<minute>\d+):(?P<second>\d+)\.(?P<microsecond>\d+)'''
+        >>> re.search(fmt, msg).groupdict()
+        {'minute': '32', 'microsecond': '271286', 'day': '13', 'year': '2018', 'month': '06', 'second': '42', 'hour': '20'}
+
+
+    4. 使用Python编写一个装饰器，打印被装饰函数的输入与输出
+        >>> def deco(func):
+        ...     def wrapper(*args, **kwargs):
+        ...         print('args: {}, kwargs: {}'.format(args, kwargs))
+        ...         ret = func(*args, **kwargs)
+        ...         print('ret: {}'.format(ret))
+        ...     return wrapper
+        ... 
+        >>> @deco
+        ... def func(*args, **kwargs):
+        ...     msg = 'func(): ...'
+        ...     return msg
+        ... 
+        >>> func('abc', 123, a=1, b=2)
+        args: ('abc', 123), kwargs: {'a': 1, 'b': 2}
+        ret: func(): ...
+        >>> 
+
+
+    5. 阐述range和xrange的区别，并用Python仿写xrange函数
+        1) range和xrange的区别
+            同 AEJS9168.jpg --> 第1题
+        2) 用Python仿写xrange函数
+            a03.py
+                #!/usr/bin/env python3
+                # -*- encoding: utf-8 -*-
+                ''' 仿写xrange函数 '''
+                
+                class RangeObject:
+                    start = None
+                    stop = None
+                    step = None
+                    current = None
+                
+                    def __init__(self, start, stop, step):
+                        if step == 0:
+                            raise ValueError('step is 0')
+                        self.start = start
+                        self.stop = stop
+                        self.step = step
+                        self.current = start
+                
+                    def __next__(self):
+                        if (
+                                self.step < 0 and self.stop < self.current
+                                or 0 < self.step and self.current < self.stop
+                                ):
+                            x = self.current
+                            self.current += self.step
+                            return x
+                        else:
+                            raise StopIteration
+                
+                    def __iter__(self):
+                        return self
+                
+                
+                def xrange_my(start, stop, step):
+                    obj = RangeObject(start, stop, step)
+                    return obj
+                
+                
+                def main():
+                    obj_asc = xrange_my(0, 5, 1)
+                    print('list(obj_asc): {}'.format(list(obj_asc)))
+                    obj_desc = xrange_my(5, 0, -1)
+                    print('list(obj_desc): {}'.format(list(obj_desc)))
+                
+                
+                if __name__ == '__main__':
+                    main()
+
+            $ python3 a03.py
+            list(obj_asc): [0, 1, 2, 3, 4]
+            list(obj_desc): [5, 4, 3, 2, 1]
+
+    6. 列举几种你曾经常用的python包并且解释其功能以及用法
+        1) uuid
+            # 获取随机数
+            s = uuid.uuid4().hex
+        2) datetime
+            # 获取当前时间
+            now = datetime.datetime.now()
+            # 获取前3天的时间
+            x = now - datetime.timedelta(days=3)
+        3) json
+            info = {'a': 1, 'b': 2}
+            # 序列化, msg的内容是无序的
+            msg = json.dumps(info, ensure_ascii=False)
+            # 反序列化
+            obj = json.loads(msg)
+        4) collections
+            有序字典
+            info = collections.OrderedDict([('a', 1), ('b', 2)])
+            # 序列化, msg的内容是有序的
+            msg = json.dumps(info, ensure_ascii=False)
+        5) requests
+            发生请求与传递参数
+            import requests
+            r = requests.get(url='http://www.163.com')
+            print(r.status_code)
+            print(r.text)
+
+
+NHXY2741.jpg
+    01. 什么是lambda函数？它有什么好处？另外python在函数编程方面提供了些什么函数与语法？
+        1) 什么是lambda函数，有什么好处:
+            同 GLYV6981.jpg --> 第6题
+        2) python函数编程
+            (1) 装饰器
+            (2) map(function, iterable)
+                返回一个迭代器，对iterable的每个项应用function，并yield结果。
+                如果传递多个iterable参数，function必须接受这么多参数，并应用到从iterables并行提取的项中。
+                如果有多个iterable，迭代器在最短的iterable耗尽时停止。
+            (3) filter(function, iterable)
+                每次从iterable对象中取出一个元素作用于我们的function，如果function返回True就保留该元素，如果返回False就删除该元素。
+            (4) reduce(function, iterable[, initializer])
+                将两个参数的函数累加到序列的项中，从左到右，以便将序列减少为单个值。
+            (5) partial(func, *args, **kwords)
+                返回一个新的partial对象，该对象在调用时将采用位置参数args和关键字参数关键字调用的func。
+                如果提供多个参数调用，它们会被追加给 args。
+                如果提供额外的关键字参数，它们会扩展和覆盖 keywords。
+
+
+    02. 详细说说tuple, list, dict的用法。它们的特点。
+        同 KIGR0063.jpg --> 第1题
+
+
+    03. 说说python中装饰器、迭代器的用法。描述下dict的items()方法与iteritems()方法的不同。
+        1) 装饰器
+            同 AVKI5321.jpg --> 第8题
+        2) 迭代器
+            同 MTNV0210.jpg --> 第5题 "2) 用Python仿写xrange函数" --> 
+                __iter__()
+                __next__()
+        3) dict的items()方法与iteritems()方法的不同
+            py2:
+                dict.items()
+                    返回一个列表，其元素是 (键, 值)。
+                    需要大量的内存，时间，生成列表对象。
+                    之后取值时，速度快。
+                dict.iteritems()
+                    返回一个迭代器。
+                    需要少量的内存、时间，生成返回迭代器对象。
+                    之后取值时，速度慢。需要调用next()函数。
+            py3:
+                dict.items()
+                    返回一个迭代器。
+                dict.iteritems()
+                    废弃。
+
+
+    04. Python是如何进行内存管理的？python的程序会内存泄漏吗？说说有没有什么方法防止及检测内存泄漏？
+        1) python内存管理
+            同 KVLS4399.jpg --> 第20题
+        2) 内存泄漏
+            python的程序，也会出现内存泄漏的问题。
+            (1) python对象的引用计数不为0
+            (2) python调用的c代码部分，存在内存泄漏
+        3) 防止及检测内存泄漏
+            (1) 防止内存泄漏
+                使用 python v3.4 及更高版本。
+                释放资源。
+            (2) 检测内存泄漏
+                <1> python代码
+                    [1] objgraph
+                        一个将图结构转化成png图片表示的工具。通过它，可以把对象的引用关系绘制成图片，为最终找到内存泄漏的对方提供最好的指导。
+                    [2] pympler
+                        Pympler是一个开发工具，用于在运行的Python应用程序中测量，监控和分析Python对象的内存行为。
+                <2> c代码
+                    Valgrind是一套Linux下，开放源代码（GPL V2）的仿真调试工具的集合。
+                    Valgrind由内核（core）以及基于内核的其他调试工具组成。
+                    内核类似于一个框架（framework），它模拟了一个CPU环境，并提供服务给其他工具；而其他工具则类似于插件 (plug-in)，利用内核提供的服务完成各种特定的内存调试任务。
+
+    05. 关于python程序的运行性能方面，有什么手段能提升性能？
+        01) 改进算法，降低时间复杂度。
+        02) 使用cprofiles库，监控代码的运行次数、时间。
+        03) 使用第三方包
+            Numpy, SciPy, GPULib, PyPy, Cython, SchedSkin等。
+        04) 使用多进程、多线程、协程
+        05) 使用内建函数
+        06) 使用join()连接字符串
+        07) 使用多重赋值，交换变量
+        08) 尽量使用局部变量
+        09) 尽量使用in
+        10) 为无限循环使用 while 1
+        11) 使用列表推导式
+        12) 使用生成器
+        13) 使用itertools库
+        14) 排序列表，使用bitsect库
+        15) 优先级队列，使用headpq库
+        16) 使用dict和set测试成员
+        17) 理解python列表，实际上是一个数组。
+        18) 使用装饰器缓存结果
+
+
+    06. list对象
+        alist = [{'name':'a','age':20}, {'name':'b','age':30}, {'name':'c','age':25}]
+        请按alist中元素的age由大到小排序
+        >>> alist.sort(key=lambda obj: obj['age'], reverse=True)
+
+
+    07. 两个list对象 
+        alist=['a','b','c','d','e','f']，
+        blist=['x','y','z','d','e','f'],
+        请用简洁的方法合并这2个list，并且list里面的元素不能重复。
+        >>> list(set(alist, blist))
+
+
+    08. 将字符串: "k:1|k1:2|k2:3|k3:4"，处理成python字段: {k:1, k1:2, ...}
+        >>> dict(s.split(':') for s in "k:1|k1:2|k2:3|k3:4".split('|'))
+
+
+    09. 列举你使用过的python网络爬虫所用到的网络数据包（最熟悉的在前）
+        requests, selenium
+
+
+    10. 列举你使用过的python网络爬虫所用到的解析数据包（最熟悉的在前）
+        bs4(Beautiful Soup), weakscraper
+
+
+    11. 请举出三种常用的排序算法
+        快速排序、归并排序、堆排序、插入排序
+
+
+    12. 列出比较熟悉的爬虫框架
+        Scrapy
+
+
+    13. 写出在网络爬虫爬取数据过程中，遇到的反爬问题的解决方案
+        A. 有些网站会通过用户代理对爬虫进行限制，只要不是浏览器访问或者一直都是某个浏览器访问，那么就限制该用户不能对网站进行访问。
+            采用用户代理池的方式进行解决。
+        B. 有些网站会通过用户访问站点时的ip进行限制，比如某一个ip在短时间内大量的访问该网站上的网页，则封掉该ip，封掉之后使用该IP就无法访问该站点了。
+            采用IP代理池的方式进行解决。
+        C. 有些网站会通过验证码对用户的访问请求进行限制。
+            使用验证码自动识别的方式去处理验证码。
+        D. 有的网站会通过数据屏蔽的方式进行反爬，比如用户访问时出现的数据并不会出现在源码中，此时这些数据会隐藏在js文件中，以此避免爬虫对这些数据的抓取。
+            采用抓包分析去找到被屏蔽的数据，并自动获取。
+
+
+    14. robots协议是什么？
+        robots协议（也称为爬虫协议、爬虫规则、机器人协议等），也就是robots.txt。
+        网站通过robots协议告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取。
+        Robots协议是网站国际互联网界通行的道德规范，其目的是保护网站数据和敏感信息、确保用户个人信息和隐私不被侵犯。
+        因其不是命令，故需要搜索引擎自觉遵守。
+        一些病毒如malware（马威尔病毒）经常通过忽略robots协议的方式，获取网站后台数据和个人信息。
+
+
+    15. http、https协议有什么区别？
+        同 KTAC2428.jpg --> 第1题
+
+
+    16. 列举几个常用的dom解析项目、插件
+        xml, lxml, xpath
+
+
+>>> ================================== pass
+    17. 如何提高爬取效率
+
+
+    18. 有一个html文本字符串，让我取出<a href="提示我这个链接地址">sflkj</a>这个a标签里面的href的链接地址？
+        >>> from bs4 import BeautifulSoup
+        >>> msg = '''<a href="提示我这个链接地址">sflkj</a>'''
+        >>> root = BeautifulSoup(msg, features='lxml')
+        >>> root.find('a').attrs['href']
+        '提示我这个链接地址'
+
+
+    19. 下面是一个单线程的代码，请改写成多线程的：
+        start = 'http://google.com'
+        queue = [start]
+        visited = {start}
+        while queue: 
+            url = queue.pop(0)
+            print(url)
+            for next_url in extract_url(url):
+                if next_url not in visited:
+                    queue.append(next_url)
+                visited.add(next_url)
+        多线程版：
+            from concurrent.futures import ThreadPoolExecutor
+             
+            start = "http://google.com"
+            queue = [start]
+            visited = {start}
+            pool = ThreadPoolExecutor(10)
+             
+            def func(url):
+                for next_url in extract_url(url):
+                    if next_url not in visited:
+                        queue.append(next_url)
+                    visited.add(next_url)
+             
+            while queue:
+                url = queue.pop(0)
+                pool.submit(func,url)
+            pool.shutdown(wait=True)
+
+
+    20. 如何爬取一个千亿级数据量查询系统的内容（每个查询都带有验证码功能），
+        请写出你的整体思路？
+        1) 购买验证码库api
+        2) 分布式 + 多进程 + 协程 + ip代理池
+
+
+NLCH3509.jpg
+    6. 请简述浏览器是如何获取一枚网页的。
+    回答一：
+        1) 浏览器发出请求：
+            1) 识别URL
+                协议、域名、文件路径名、端口号
+            2) 查找ip地址
+                1) 查寻本地hosts
+                2) 若本地hosts没有，查寻本地域名服务器
+                3) 若本地域名服务器没有，本地域名服务器查寻根域名服务器
+                4) 返回域名对应的ip地址
+            3) 用http包，封装请求
+                应用层
+            4) 使用套接字(Socket)建立连接
+                运输层
+                用tcp包，封装http包。
+                tcp套接字:
+                    源IP地址、源端口号、目的IP地址和目的端口号
+                tcp连接“3次握手”
+            5) 发送请求
+                在tcp连接“3次握手”中，第3次握手是，将请求发出。
+            6) 路由寻址
+                网络层
+                用ip包，封装tcp包。
+                (1) 搜索路由表，寻找能与目的主机IP地址完全匹配的表目。
+                    如果找到，则把报文发送给下一跳节点。
+                (2) 搜索路由表，寻找能与目标网络号相匹配的表目。
+                    如果找到，则把报文发送给下一跳节点。
+                (3) 搜索路由表，寻找“默认”的表目。
+                    如果找到，则把报文发送给下一跳节点。
+                (4) 若没有找到，该数据报就不能被传送。
+                    如果不能传送的数据报来自本机，那么一般会向生成数据报的应用程序返回一个“主机不可达”或“网络不可达”的错误。
+            7) 关闭连接
+
+        目标主机收到了请求后，自底向上地对该请求进行处理。
+        链路层把数据报传给网络层，网路层将TCP数据段通过对应的Socket传给应用程序。
+        应用程序处理请求后产生一个应答的HTTP报文，又经过了一层层的封装、一跳跳的传输到达了源主机。
+    回答二：
+        1) 在浏览器中，输入网址
+        2) 浏览器查找域名的ip地址
+            DNS查找过程如下：
+                浏览器缓存
+                    浏览器会缓存DNS记录一段时间。 有趣的是，操作系统没有告诉浏览器储存DNS记录的时间，这样不同浏览器会储存个自固定的一个时间（2分钟到30分钟不等）。
+                系统缓存
+                    如果在浏览器缓存里没有找到需要的记录，浏览器会做一个系统调用（windows里是gethostbyname）。这样便可获得系统缓存中的记录。
+                路由器缓存
+                    接着，前面的查询请求发向路由器，它一般会有自己的DNS缓存。
+                ISP DNS 缓存
+                    接下来要check的就是ISP缓存DNS的服务器。在这一般都能找到相应的缓存记录。
+                递归搜索
+                    你的ISP的DNS服务器从跟域名服务器开始进行递归搜索，从.com顶级域名服务器到Facebook的域名服务器。一般DNS服务器的缓存中会有.com域名服务器中的域名，所以到顶级服务器的匹配过程不是那么必要了。
+        3) 浏览器给web服务器发送一个HTTP请求
+              因为像Facebook主页这样的动态页面，打开后在浏览器缓存中很快甚至马上就会过期，毫无疑问他们不能从缓存中读取，所以，浏览器将把一个请求发送到Facebook所在的服务器：
+        4) 服务的永久重定向响应
+            使用重定向的原因：
+                (1) 搜索引擎排名
+                (2) 缓存友好性
+        5) 浏览器跟踪重定向地址 
+        6) 服务器“处理”请求
+            服务器接收到获取请求，然后处理并返回一个响应。
+                (1) Web 服务器软件
+                    web服务器软件（像Apache2、Nginx和IIS）接收到HTTP请求，然后确定执行什么请求处理来处理它。
+                    请求处理就是一个能够读懂请求并且能生成HTML来进行响应的程序（像ASP.NET,PHP,RUBY...）。
+                (2) 请求处理
+                    请求处理阅读请求及它的参数和cookies。
+                    它会读取也可能更新一些数据，并讲数据存储在服务器上。
+                    然后，需求处理会生成一个HTML响应。
+        7) 服务器发回一个HTML响应
+        8) 浏览器开始显示HTML
+        9) 浏览器发送获取嵌入在HTML中的对象
+        10) 浏览器发送异步（AJAX）请求
+
+
+    7. 请写出可以一定程度判断网页是否变化的响应头。
+        1) Last-Modified / If-Modified-Since
+            在浏览器第一次请求某一个URL时，服务器端的返回状态会是200，内容是你请求的资源，同时有一个Last-Modified的属性标记此文件在服务期端最后被修改的时间。
+                Last-Modified: Fri, 12 May 2006 18:53:33 GMT
+            客户端第二次请求此URL时，根据 HTTP 协议的规定，浏览器会向服务器传送 If-Modified-Since 报头，询问该时间之后文件是否有被修改过。
+                If-Modified-Since: Fri, 12 May 2006 18:53:33 GMT
+            如果服务器端的资源没有变化，则自动返回 HTTP 304 （Not Changed.）状态码，内容为空，这样就节省了传输数据量。
+            当服务器端代码发生改变或者重启服务器时，则重新发出资源，返回和第一次请求时类似。
+            从而保证不向客户端重复发出资源，也保证当服务器有变化时，客户端能够得到最新的资源
+        2) ETag / If-None-Match
+            HTTP 协议规格说明定义ETag为“被请求变量的实体值”。另一种说法是，ETag是一个可以与Web资源关联的记号（token）。典型的Web资源可以一个Web页，但也可能是JSON或XML文档。服务器单独负责判断记号是什么及其含义，并在HTTP响应头中将其传送到客户端，以下是服务器端返回的格式：
+                ETag: “50b1c1d4f775c61:df3”
+            客户端的查询更新格式是这样的：
+                If-None-Match: W/”50b1c1d4f775c61:df3”
+            如果ETag没改变，则返回状态304然后不返回，这也和Last-Modified一样。
+
+
+    8. 通过http服务器日志如何干掉恶意爬虫
+        cat www.access.log | awk '{print $1 " " substr($4,14,5)}' | sort -n| uniq -c| sort -nr| head -20
+            列出在一分钟内访问网站次数最多的前20位ip地址。
+        cat www.access.log | grep 60.190.128.6 | awk '{print $1 " " substr($4,14,5)}' | sort -n| uniq -c| sort -nr| head -20
+            查看一天中某个ip地址对网站服务器的访问时间分段情况。
+        cat www.access.log | grep ip地址
+            可以看看这些高强度的地址访问都在干些什么。
+
+
+    9. 简述图片验证码的工作流程
+        1) 用户请求页码
+        2）服务器生成图片验证码，并记录在redis中
+        3）浏览器显示图片验证码
+        4）用户输入界面上的图片验证码
+        5）进行服务器端校验
+
+
+PXJE7884.jpg
+    In machine learning, naive Bayes classifiers are a family of simple probabilistic
+    classifiers based on applying Bayes' theorem with strong (naive) independence 
+    assumptions between the features.
+    Naive Bayes has been studied extensively since the 1950s. It was introduced under
+    a different name into the text retrieval community in the early 1960s, and remains
+    a popular (baseline) method for text categorization, the problem of judging
+    documents as belonging to one category or the other (such as spam or legitimate,
+    sports or politics, etc.) with word frequencies as the features. With appropriate
+    pre-processing, it is competitive in this domain with more advanced methods
+    including support vector machines. It also finds application in automatic medical
+    diagnosis.
+    Naive Bayes classifiers are highly scalable, requiring a number of parameters linear
+    in the number of variables (features/predictors) in a learning problem. Maximum-
+    likelihood training can be done by evaluating a closed-form expression, with
+    takes linear time, rather than by expensive iterative approximation as used for 
+    many other types of classifiers.
+    In the statistics and computer science literature, Naive Bayes models are known
+    under a variety of names, including simple Bayes and independence Bayes.  All
+    these names reference the use of Bayes' theorem in the classifier's decision rule,
+    but naive Bayes is not (necessarily) a Bayesian method.
+    
+    1. 请翻译该段文字
+        https://zh.wikipedia.org/wiki/朴素贝叶斯分类器
+
+        在机器学习中，单纯贝氏分类器 是一系列以假设特征之间强（朴素）独立下运用贝叶斯定理为基础的简单概率分类器。
+
+        单纯贝氏自20世纪50年代已广泛研究。
+        在20世纪60年代初就以另外一个名称引入到文本信息检索界中，并仍然是文本分类的一种热门（基准）方法，文本分类是以词频为特征判断文件所属类别或其他（如垃圾邮件、合法性、体育或政治等等）的问题。
+        通过适当的预处理，它可以与这个领域更先进的方法（包括支持向量机）相竞争。它在自动医疗诊断中也有应用。
+
+        单纯贝氏分类器 是高度可扩展的，因此需要数量与学习问题中的变量（特征/预测器）成线性关系的参数。
+        最大似然训练可以通过评估一个封闭形式的表达式来完成，只需花费线性时间，而不需要其他很多类型的分类器所使用的费时的迭代逼近。
+
+        在统计学和计算机科学文献中，单纯贝氏模型有各种名称，包括简单贝叶斯和独立贝叶斯。
+        所有这些名称都参考了贝叶斯定理在该分类器的决策规则中的使用，但单纯贝氏不（一定）用到贝叶斯方法。
+
+>>> ================================== pass
+    2. 如了解该算法，请写出算法对应的伪码
+
+
+QFVA5217.jpg
+    接 GYKR3955.jpg
+    
+    四、三、编程题目
+        http://www.ccgp-liaoning.gov.cn/login.do;jsessionid=zykRbp1pYmSLqwXhsKYJyhyDQ6Gv8TWVXhyZwZTKhSvd7ZgJpTJ9!971784726?method=beginlogin
+
+
+QMVT6611.jpg
+    同 KEQO0150.jpg
+
+
+QRKV1905.jpg
+    06. 场景：一个大于内存的txt日志文件，如果统计出某个字符出现的次数，请简述。
+        文件以字符串模式打开，分块(256MB)依次读入内存。
+        对每块数据，统计该数据块中，某个字符出现的次数。
+        str.count(s)        统计字符串中，字符s的数量
+
+
+    07. 场景：现有sever1, server2, server3三台消费者，生产者1通过api接口来调用，也就是说三台消费者都部署类api访问，请简述如何优化负载均衡。
+        方法一：
+            使用nginx，对3台消费者做负载均衡。
+        方法二：
+            使用celery + rabbitmq，通过异步消息队列，对生产者做缓冲。
+            当消费者处理完当前请求后，会从rabbitmq上获取新的任务。
+
+
+    08. 场景：股票行情源1不稳定，住要表现在获取所有股票行情的时候，有些股票会意外中断如timeout，请问如何优化程序。
+        分块获取行情数据，每块返回100只股票的数据。
+        如果还会中断，继续减少每块的数据量。
+
+
+    09. 场景：股票行情获取两种方法：
+        1) 全量获取
+        2) 增量获取
+        现需获取前复权数据（如当天有复权，历史行情会变化），全量获取速度会比增量获取慢。
+        请问如何以最快速度获取股票行情。
+        回答：
+            1) 当天复权的股票，使用全量获取数据。
+            2) 其它股票，使用增量获取数据。
+
+
+    10. 场景：根据字符串来筛选股票，并将股票从CSV中读取导入到程序中，并返回结果。简述如何更快的返回结果。
+        使用正则表达式，筛选股票。
+        使用pandas库，从csv文件中读取数据。
+
+
+RILC9864.jpg
+    1. tuple和list的区别
+        1) list中是可变的，tuple不可变
+        2) 定义只有一个元素的tuple的时候，必须加逗号，否则不会被认为是tuple，而被识别为括号
+        3) 元组可以转列表，但不可以转字典
+
+
+    2. 这两个参数是什么意识：*args, **kwargs？我们为什么要使用它们？
+        同 KIGR0063.jpg --> 第9题
+
+
+    3. python里面如何实现tuple和list的转换
+        1) tuple(seq)
+            把所有可迭代的(iterable)序列转换成一个tuple, 元素不变，排序也不变。
+        2) list(seq)
+            把所有的序列和可迭代的对象转换成一个list,元素不变，排序也不变。
+
+
+    4. python里面rang和xrange的区别
+        同 AEJS9168.jpg --> 第1题
+
+
+    5. python里面copy和deepcopy的区别
+        同 AEJS9168.jpg --> 第4题
+
+
+    6. python里面search()和match()的区别
+        同 GLYV6981.jpg --> 第4题
+
+
+    7. python里面classmethod与staticmethod的区别
+        同 ACWM8074.jpg --> 第(3)题
+
+
+    8. 如何反序输出序列，比如[2,6,5,3]，输出为[3,5,6,2]
+        >>> reversed([2,6,5,3])
+        [3,5,6,2]
+
+
+    9. 请写出一段python代码实现删除一个list里面的重复元素
+        同 DGWR3850.jpg --> 第9题
+
+
+    10. 以下的代码的输出将是什么？说出你的答案并解释
+        class Parent(object):
+            x = 1
+
+        class Child1(Parent):
+            pass
+
+        class Child2(Parent):
+            pass
+
+        print Parent.x, Child1.x, Child2.x
+        Child1.x = 2
+        print Parent.x, Child1.x, Child2.x
+        Parent.x = 3
+        print Parent.x, Child1.x, Child2.x
+        输出：
+            1 1 1
+            1 2 1
+            3 2 3
+        解释：
+            1 2 1
+                因为Child1.x = 2
+            3 2 3
+                因为Parent.x = 3
+
+
+    11. python代码如何得到列表list的交集与差集
+        b1=[1,2,3]
+        b2=[2,3,4]
+        交集：
+            set(b1) & set(b2)
+        差集：
+            set(b1) - set(b2)
+            或者 set(b2) - set(b1)
+
+
+    12. 请写一段代码输出1到100的和。
+        >>> import functools
+        >>> functools.reduce(lambda x, y: x+y, range(1, 101))
+        5050
+
+
+    13. 在函数中使用global关键字声明全局变量
+        >>> def func():
+        >>>     global COUNT
+        >>>     pass
+
+
+    14. python正则表达式提取字符串中的数字
+        s = '12j33jk12ksdjfkj23jk4h1k23h'
+        >>> fmt = r'\D*(\d+)\D*'
+        >>> arr = re.findall(fmt, s)
+        >>> [int(s) for s in arr if s]
+        [12, 33, 12, 23, 4, 1, 23]
+
+
+    15. 补充下面函数代码
+        def deco(func):
+            补充代码部分
+
+        @deco
+        def myfunc2(a,b):
+            print(" myfunc(%s, %s) called." % (a, b))
+            return a+b
+
+        回答：
+            def deco(func):
+                def wrapper(*args, **kwargs):
+                    ret = func(*args, **kwargs)
+                return wrapper
+
+
+RLQS6879.jpg
+    一、Python类的简答题（任选10个，尽可能选择复杂的）
+        01. list和tuple的区别
+            同 KIGR0063.jpg --> 第1题
+
+
+        02. list和dict两种结构的区别
+            list 是以动态数组（Array）实现的。
+                最大的开销发生在超过当前分配大小的增长，这种情况下所有元素都需要移动；或者是在起始位置附近插入或者删除元素，这种情况下所有在该位置后面的元素都需要移动。
+                如果你需要在一个队列的两端进行增删的操作，应当使用collections.deque（双向队列）
+                list是对象的序列，list 中的元素可以是同构，也可以异构的。
+
+                以完全随机的列表考虑平均情况。
+                操作 	        平均情况 	最坏情况
+                --------------------------------------
+                复制 	        O(n) 	    O(n)
+                append[注1] 	O(1) 	    O(1)
+                插入 	        O(n) 	    O(n)
+                取元素 	        O(1) 	    O(1)
+                更改元素 	    O(1) 	    O(1)
+                删除元素 	    O(n) 	    O(n)
+                遍历 	        O(n) 	    O(n)
+                取切片 	        O(k) 	    O(k)
+                删除切片 	    O(n) 	    O(n)
+                更改切片 	    O(k+n) 	    O(k+n)
+                extend[注1] 	O(k) 	    O(k)
+                排序 	        O(n log n) 	O(n log n)
+                列表乘法 	    O(nk) 	    O(nk)
+                x in s 	        O(n) 	 
+                min(s), max(s) 	O(n) 	 
+                计算长度 	    O(1) 	    O(1)
+            
+            dict 是以哈希表（hash）实现的。
+                字典是无序的集合。
+                下列字典的平均情况基于以下假设：
+                    (1) 对象的散列函数足够撸棒（robust），不会发生冲突。
+                    (2) 字典的键是从所有可能的键的集合中随机选择的。           
+                操作 	        平均情况 	最坏情况
+                ------------------------------------
+                复制            O(n) 	    O(n)
+                取元素 	        O(1) 	    O(n)
+                更改元素        O(1) 	    O(n)
+                删除元素 	    O(1) 	    O(n)
+                遍历            O(n) 	    O(n)
+
+
+        03. 对list进行切片的用法
+            取list的部分元素。
+            语法：
+                list[start:stop:step]
+            若step < 0，则stop < start。否则，返回[]。
+            若step = 0，则抛出ValueError。
+            若0 < step，则start < stop。否则，返回[]。
+
+
+        04. 对一个list去除重复项
+            同 DGWR3850.jpg --> 第9项
+
+
+        05. 什么是lambda函数？它有什么好处？
+            同 GLYV6981.jpg --> 第6题
+
+
+        06. 利用yield关键字的好处
+            yield每次调用都返回当前计算值，并在下一次调用时，将继续沿着上次的记忆进行。
+            1) 更节省存储空间
+            2) 响应更迅速
+            3) 使用更灵活
+
+
+        07. 如何用python输出一个Fibonacci数列？
+            >>> def fib_yield(n):
+            ...     a, b = 0, 1
+            ...     while 0 < n:
+            ...         yield a
+            ...         a, b = b, a+b
+            ...         n = n - 1
+            ...     yield a
+            ...
+            >>> list( fib_yield(10) )
+            [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55] 
+            
+
+        08. Python中pass语句的作用是什么？
+            同 KIGR0063.jpg --> 第6题
+
+
+        09. 介绍以下except的用法和作用？
+            except是异常处理器，用于捕捉指定类型的异常。
+            Python的异常处理能力很强大的，可向用户准确反馈出错信息。
+            在Python中，异常也是对象，可对它进行操作。
+            所有异常都是基类 Exception的成员。
+            所有异常都从基类Exception继承，而且都在exceptions模块中定义。
+            Python自动将所有异常名称放在内建命名空间中，所以程序不必导入exceptions模块即可使用异常。
+            一旦引发而且没有捕捉SystemExit异常，程序执行就会终止。
+            如果交互式会话遇到一个未被捕捉的SystemExit异常，会话就会终止。
+            语法：
+                try:
+                    statements
+                except [type [as value]]:
+                    statements
+                [except [type [as value]]:
+                    statements]*
+                [else:
+                    statements]
+                [finally:
+                    statements]
+
+
+        10. 介绍一下Python下range()函数和xrange()函数的用法及区别？
+            同 AEJS9168.jpg --> 第1题
+
+
+        11. python里面search()和match()的区别？
+            同 GLYV6981.jpg --> 第4题
+
+
+        12. 用Python匹配HTML tag的时候，<.*>和<.*?>有什么区别？
+            在正则表达式中：
+                r'<.*>'是贪婪匹配，表示尽可能多的匹配。
+                r'<.*?>'是非贪婪匹配，表示尽可能少的匹配。
+            例如：
+                字符串：<abc>def<ghi>
+                r'<.*>'的匹配结果，是全部。
+                r'<.*?>'的匹配结果，是'<abc>'和'<ghi>'。
+
+
+        13. 利用正则表达式从一段html文本中提取多个字段值
+            >>> import re
+            >>> 
+            >>> content = '''
+            >>> <td>
+            >>> <a href="https://www.baidu.com/articles/zj.html" title="浙江省">浙江省主题介绍</a>
+            >>> <a href="https://www.baidu.com//articles/gz.html" title="贵州省">贵州省主题介绍</a>
+            >>> </td>
+            >>> '''
+            >>> 
+            >>> # 获取<a href></a>之间的内容
+            >>> print('获取链接文本内容:')
+            获取链接文本内容:
+            >>> res = r'<a .*?>(.*?)</a>'
+            >>> m = re.findall(res, content, re.S|re.M)
+            >>> for value in m:
+            ...     print(value)
+            ...
+            浙江省主题介绍
+            贵州省主题介绍
+            >>> 
+            >>> # 获取所有<a href></a>链接所有内容
+            >>> print('获取完整链接内容:')
+            获取完整链接内容:
+            >>> urls = re.findall(r"<a.*?href=.*?<\/a>", content, re.I|re.S|re.M)
+            >>> for i in urls:
+            ...     print(i)
+            ...
+            <a href="https://www.baidu.com/articles/zj.html" title="浙江省">浙江省主题介绍</a>
+            <a href="https://www.baidu.com//articles/gz.html" title="贵州省">贵州省主题介绍</a>
+            >>> 
+            >>> # 获取<a href></a>中的URL
+            >>> print('获取链接中URL:')
+            获取链接中URL:
+            >>> res_url = r"(?<=href=\").+?(?=\")|(?<=href=\').+?(?=\')"
+            >>> link = re.findall(res_url, content, re.I|re.S|re.M)
+            >>> for url in link:
+            ...     print(url)
+            ...
+            https://www.baidu.com/articles/zj.html
+            https://www.baidu.com//articles/gz.html
+
+
+        14. Python里面如何生成随机数？
+            同 KIGR0063.jpg --> 第7题
+
+
+        15. python如何定义一个函数？
+            def 函数名(传入函数的值):
+                pass
+
+
+        16. 用两种方法按行读取一个csv文件
+            方法一：
+                with open(f_name) as f:
+                    for row in f:
+                        pass
+            方法二：
+                import csv
+                with open(f_name, newline='') as f:
+                    obj = csv.reader(f, delimiter=' ', quotechar="|")
+                    for row in obj:
+                        pass
+
+
+        17. python如何实现单例模式？其它23种设计模式python如何实现？
+            1) 单例模式（Singleton Pattern）是一种常用的软件设计模式，该模式的主要目的是确保某一个类只有一个实例存在。
+            2) 单例模式的实现
+                链接：http://www.cnblogs.com/huchong/p/8244279.html
+
+                (1) 使用模块 (名字绑定)
+                    Python 的模块就是天然的单例模式，因为模块在第一次导入时，会生成 .pyc 文件，当第二次导入时，就会直接加载 .pyc 文件，而不会再次执行模块代码。
+                    因此，我们只需把相关的函数和数据定义在一个模块中，就可以获得一个单例对象了。
+                    a01.py
+                        class A: pass
+                        a = A()
+                    >>> from a01 import a
+                (2) 使用装饰器
+                    a02.py
+                        def deco(cls):
+                            _instance = {}
+
+                            def wrapper(*args, **kwargs):
+                                if cls not in _instance:
+                                    _instance[cls] = cls(*args, **kwargs)
+                                return _instance[cls]
+
+                            return wrapper
+
+                        @deco
+                        class A:
+                            a = 1
+
+                            def __init__(self, x=0):
+                                self.x = x
+                (3) 使用类
+                    import time
+                    import threading
+
+                    class Singleton(object):
+                        _instance_lock = threading.Lock()
+                    
+                        def __init__(self):
+                            time.sleep(1)
+                    
+                        @classmethod
+                        def instance(cls, *args, **kwargs):
+                            if not hasattr(Singleton, "_instance"):
+                                with Singleton._instance_lock:
+                                    if not hasattr(Singleton, "_instance"):
+                                        Singleton._instance = Singleton(*args, **kwargs)
+                            return Singleton._instance
+
+
+                    def task(arg):
+                        obj = Singleton.instance()
+                        print(obj)
+
+                    for i in range(10):
+                        t = threading.Thread(target=task,args=[i,])
+                        t.start()
+                    time.sleep(20)
+                    obj = Singleton.instance()
+                    print(obj)
+                    这种方式实现的单例模式，使用时会有限制，以后实例化必须通过 obj = Singleton.instance() 。
+                4) 基于__new__方法实现
+                    import threading
+
+                    class Singleton(object):
+                        _instance_lock = threading.Lock()
+                    
+                        def __new__(cls, *args, **kwargs):
+                            if not hasattr(Singleton, "_instance"):
+                                with Singleton._instance_lock:
+                                    if not hasattr(Singleton, "_instance"):
+                                        Singleton._instance = object.__new__(cls)  
+                            return Singleton._instance
+                    
+                        def __init__(self): pass
+                    
+                    obj1 = Singleton()
+                    obj2 = Singleton()
+                    print(obj1,obj2)
+                    
+                    def task(arg):
+                        obj = Singleton()
+                        print(obj)
+                    
+                    for i in range(10):
+                        t = threading.Thread(target=task,args=[i,])
+                        t.start()
+                5) 基于metaclass方法实现
+                    import threading
+                    
+                    class SingletonType(type):
+                        _instance_lock = threading.Lock()
+                    
+                        def __call__(cls, *args, **kwargs):
+                            if not hasattr(cls, "_instance"):
+                                with SingletonType._instance_lock:
+                                    if not hasattr(cls, "_instance"):
+                                        cls._instance = super(SingletonType, cls).__call__(*args, **kwargs)
+                            return cls._instance
+                    
+                    class Foo(metaclass=SingletonType):
+                        def __init__(self,name):
+                            self.name = name
+                    
+                    
+                    obj1 = Foo('name')
+                    obj2 = Foo('name')
+                    print(obj1,obj2)
+            3) 设计模式
+                (1) 创建型
+                    1. Factory Method（工厂方法）
+                        定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到其子类。
+                    2. Abstract Factory（抽象工厂）
+                        供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。 
+                    3. Builder（建造者）
+                        一个复杂的构建过程与其具表示细节相分离，使得同样的构建过程可以创建不同的表示
+                    4. Prototype（原型）
+                        通过拷贝原型创建新的对象
+                    5. Singleton（单例）
+                        保证一个类仅有一个实例
+                (2) 结构型
+                    6. Adapter Class/Object（适配器）
+                        使得原本由于接口不兼容而不能一起工作的那些类可以一起工作
+                    7. Bridge（桥接）
+                        两个维度独立变化，依赖方式实现抽象与实现分离：需要一个作为桥接的接口/抽象类，多个角度的实现类依赖注入到抽象类，使它们在抽象层建立一个关联关系
+                    8. Composite（组合）
+                        用户对单个对象和组合对象的使用具有一致性的统一接口
+                    9. Decorator（装饰）
+                        保持接口，增强性能：修饰类继承被修饰对象的抽象父类，依赖被修饰对象的实例（被修饰对象依赖注入），以实现接口扩展
+                    10. Facade（外观）
+                        在客户端和复杂系统之间再加一层，这一次将调用顺序、依赖关系等处理好。即封装底层实现，隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的高层接口
+                    11. Flyweight（享元）
+                        享元工厂类控制；HashMap实现缓冲池重用现有的同类对象，如果未找到匹配的对象，则创建新对象
+                    12. Proxy（代理）
+                        为其他对象提供一种代理以控制对这个对象的访问：增加中间层（代理层），代理类与底层实现类实现共同接口，并创建底层实现类对象（底层实现类对象依赖注入代理类），以便向外界提供功能接口
+                (3) 行为型
+                    13. Interpreter（解释器）
+                        给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该标识来解释语言中的句子
+                    14. Template Method（模板方法）
+                        将这些通用算法抽象出来，在一个抽象类中公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行
+                    15. Chain of Responsibility（责任链）
+                        拦截的类都实现统一接口，每个接收者都包含对下一个接收者的引用。将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。
+                    16. Command（命令）
+                        将"行为请求者"与"行为实现者"解耦：调用者依赖命令，命令依赖接收者，调用者Invoker→命令Command→接收者Receiver
+                    17. Iterator（迭代器）
+                        集合中含有迭代器：分离了集合对象的遍历行为，抽象出一个迭代器类来负责，无须暴露该对象的内部表示
+                    18. Mediator（中介者）
+                        对象与对象之间存在大量的关联关系，将对象之间的通信关联关系封装到一个中介类中单独处理，从而使其耦合松散，可以独立地改变它们之间的交互策略模式（Strategy Pattern）：策略对象依赖注入到context对象，context对象根据它的策略改变而改变它的相关行为(可通过调用内部的策略对象实现相应的具体策略行为)
+                    19. Memento（备忘录）
+                        通过一个备忘录类专门存储对象状态。客户通过备忘录管理类管理备忘录类。
+                    20. Observer（观察者）
+                        一对多的依赖关系，在观察目标类里有一个 ArrayList 存放观察者们。当观察目标对象的状态发生改变，所有依赖于它的观察者都将得到通知，使这些观察者能够自动更新（即使用推送方式）
+                    21. State（状态）
+                        状态对象依赖注入到context对象，context对象根据它的状态改变而改变它的相关行为(可通过调用内部的状态对象实现相应的具体行为)
+                    22. Strategy（策略）
+                        策略对象依赖注入到context对象，context对象根据它的策略改变而改变它的相关行为(可通过调用内部的策略对象实现相应的具体策略行为)
+                    23. Visitor（访问者）
+                        定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。TemplateMethod 使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。
+
+
+        18. 任意一种排序方法的代码实现（尽量选择时间复杂度是 O(NlogN) ）
+            链接：https://blog.csdn.net/ester_yc/article/details/77933182
+
+                                                时间复杂度                      空间复杂度
+            类别    排序方法    ----------------------------------------------------------------稳定性
+                                平均情况        最好            最坏            辅助存储
+            ------------------------------------------------------------------------------------------
+            插入    直接插入    O(n**2)         O(n)            O(n**2)         O(1)            稳定
+                    shell排序   O(n**1.3)       O(n)            O(n**2)         O(1)            不稳定
+            选择    直接排序    O(n**2)         O(n**2)         O(n**2)         O(1)            不稳定
+                    堆排序      O(n*log2(n))    O(n*log2(n))    O(n*log2(n))    O(1)            不稳定
+            交换    冒泡排序    O(n**2)         O(n)            O(n**2)         O(1)            稳定
+                    快速排序    O(n*log2(n))    O(n*log2(n))    O(n**2)         O(n*log2(n))    不稳定
+            归并排序            O(n*log2(n))    O(n*log2(n))    O(n*log2(n))    O(1)            稳定
+            基数排序            O(d(r+n))       O(d(n+rd))      O(d(r+n))       O(rd+n)         稳定
+
+            归并排序的代码:
+                def merge(left, right):  
+                    i, j = 0, 0  
+                    result = []  
+                    while i < len(left) and j < len(right):  
+                        if left[i] <= right[j]:  
+                            result.append(left[i])  
+                            i += 1  
+                        else:  
+                            result.append(right[j])  
+                            j += 1  
+                    result += left[i:]  
+                    result += right[j:]  
+                    return result  
+                   
+                def merge_sort(lists):  
+                    # 归并排序  
+                    if len(lists) <= 1:  
+                        return lists  
+                    num = len(lists) / 2  
+                    left = merge_sort(lists[:num])  
+                    right = merge_sort(lists[num:])  
+                    return merge(left, right)  
+
+
+        19. 简述程序运行时间和时间复杂度的区别，并举例说明。
+            链接：https://blog.csdn.net/ester_yc/article/details/77933182
+
+            1) 时间复杂度：
+                （1）时间频度：
+                    时间频度 一个算法执行所耗费的时间，从理论上是不能算出来的，必须上机运行测试才能知道。但我们不可能也没有必要对每个算法都上机测试，只需知道哪个算法花费的时间多，哪个算法花费的时间少就可以了。并且一个算法花费的时间与算法中语句的执行次数成正比例，哪个算法中语句执行次数多，它花费时间就多。一个算法中的语句执行次数称为语句频度或时间频度。记为T(n)。
+                （2）时间复杂度：
+                    在刚才提到的时间频度中，n称为问题的规模，当n不断变化时，时间频度T(n)也会不断变化。但有时我们想知道它变化时呈现什么规律。为此，我们引入时间复杂度概念。 一般情况下，算法中基本操作重复执行的次数是问题规模n的某个函数，用T(n)表示，若有某个辅助函数f(n),使得当n趋近于无穷大时，T（n)/f(n)的极限值为不等于零的常数，则称f(n)是T(n)的同数量级函数。记作T(n)=Ｏ(f(n)),称Ｏ(f(n)) 为算法的渐进时间复杂度，简称时间复杂度。 
+                    在各种不同算法中，若算法中语句执行次数为一个常数，则时间复杂度为O(1),另外，在时间频度不相同时，时间复杂度有可能相同，如T(n)=n2+3n+4与T(n)=4n2+2n+1它们的频度不同，但时间复杂度相同，都为O(n2)。 按数量级递增排列，常见的时间复杂度有：常数阶O(1),对数阶O(log2n),线性阶O(n), 线性对数阶O(nlog2n),平方阶O(n^2)，立方阶O(n^3),...， k次方阶O(n^k),指数阶O(2^n)。随着问题规模n的不断增大，上述时间复杂度不断增大，算法的执行效率越低。 
+            2) 空间复杂度：
+                与时间复杂度类似，空间复杂度是指算法在计算机内执行时所需存储空间的度量。记作: S(n)=O(f(n)) 我们一般所讨论的是除正常占用内存开销外的辅助存储单元规模。讨论方法与时间复杂度类似，不再赘述。 
+                类似于时间复杂度的讨论，一个算法的空间复杂度(Space Complexity)S(n)定义为该算法所耗费的存储空间，它也是问题规模n的函数。渐近空间复杂度也常常简称为空间复杂度。 
+                空间复杂度(Space Complexity)是对一个算法在运行过程中临时占用存储空间大小的量度。一个算法在计算机存储器上所占用的存储空间，包括存储算法本身所占用的存储空间，算法的输入输出数据所占用的存储空间和算法在运行过程中临时占用的存储空间这三个方面。算法的输入输出数据所占用的存储空间是由要解决的问题决定的，是通过参数表由调用函数传递而来的，它不随本算法的不同而改变。存储算法本身所占用的存储空间与算法书写的长短成正比，要压缩这方面的存储空间，就必须编写出较短的算法。算法在运行过程中临时占用的存储空间随算法的不同而异，有的算法只需要占用少量的临时工作单元，而且不随问题规模的大小而改变，我们称这种算法是“就地/"进行的，是节省存储的算法，如这一节介绍过的几个算法都是如此；有的算法需要占用的临时工作单元数与解决问题的规模n有关，它随着n的增大而增大，当n较大时，将占用较多的存储单元，例如将在第九章介绍的快速排序和归并排序算法就属于这种情况。
+                如当一个算法的空间复杂度为一个常量，即不随被处理数据量n的大小而改变时，可表示为O(1)；当一个算法的空间复杂度与以2为底的n的对数成正比时，可表示为0(10g2n)；当一个算法的空I司复杂度与n成线性比例关系时，可表示为0(n).若形参为数组，则只需要为它分配一个存储由实参传送来的一个地址指针的空间，即一个机器字长空间；若形参为引用方式，则也只需要为其分配存储一个地址的空间，用它来存储对应实参变量的地址，以便由系统自动引用实参变量。
+            3) 时间复杂度的计算：算法的时间复杂度(大O阶)的计算方法为： 
+                (1)用常数1取代运行时间中的所有加法常数。
+                (2)在修改后的运行次数函数中，只保留高阶项。
+                (3)如果最高阶项存在且不是1，则去除与这个项相乘的常数。
+
+
+    二、数据库
+        1. 简述数据库的锁机制
+            数据库是一个多用户使用的共享资源。当多个用户并发地存取数据时，在数据库中就会产生多个事务同时存取同一数据的情况。若对并发操作不加控制就可能会读取和存储不正确的数据，破坏数据库的一致性。
+            加锁是实现数据库并发控制的一个非常重要的技术。当事务在对某个数据对象进行操作前，先向系统发出请求，对其加锁。加锁后事务就对该数据对象有了一定的控制，在该事务释放锁之前，其他的事务不能对此数据对象进行更新操作。
+            锁的基本类型
+                1) 行级锁是一种排他锁，防止其他事务修改此行
+                2) 表级锁
+                    (1) 行共享 (ROW SHARE) – 禁止排他锁定表
+                    (2) 行排他(ROW EXCLUSIVE) – 禁止使用排他锁和共享锁
+                    (3) 共享锁(SHARE) – 锁定表，对记录只读不写，多个用户可以同时在同一个表上应用此锁
+                    (4) 共享行排他(SHARE ROW EXCLUSIVE) – 比共享锁更多的限制，禁止使用共享锁及更高的锁
+                    (5) 排他(EXCLUSIVE) – 限制最强的表锁，仅允许其他用户查询该表的行。禁止修改和锁定表
+             所谓悲观锁就是基于数据库机制实现的。
+                比如在在使用select子句的时候加上for update，那么直到改子句的事务结束为止，任何应用都无法修改select出来的记录。
+             所谓乐观锁是基于应用的版本机制来实现的。
+                一般会在表里面设计一个版本字段v（我一般会把这个字段设为timestamp）。
+
+
+        2. Mysql共有几种存储引擎，简述各自的特点。
+            mysql的存储引擎包括：MyISAM、 InnoDB、BDB、MEMORY、MERGE、EXAMPLE、NDB Cluster、ARCHIVE、CSV、BLACKHOLE、FEDERATED等。 
+                01) MyISAM：默认的MySQL 插件式存储引擎，它是在Web、数据仓储和其他应用环境下最常使用的存储引擎之一
+                02) InnoDB：用于事务处理应用程序，具有众多特性，包括ACID 事务支持。
+                03) BDB(BerkeleyDB)：提供事务安全表。
+                04) Memory：将所有数据保存在RAM中，在需要快速查找引用和其他类似数据的环境下，可提供极快的访问。
+                05) Merge：允许MySQL DBA 或开发人员将一系列等同的MyISAM 表以逻辑方式组合在一起，并作为1 个对象引用它们。对于诸如数据仓储等VLDB环境十分适合。
+                06) Example：一个“存根”引擎，它不做什么。你可以用这个引擎创建表，但没有数据被存储于其中或从其中检索。这个引擎的目的是服务，
+                07) NDB Cluster：被MySQL Cluster用来实现分割到多台计算机上的表的存储引擎。
+                08) Archive：Archive是归档的意思，在归档之后很多的高级功能就不再支持了，仅仅支持最基本的插入和查询两种功能。
+                09) CSV：把数据以逗号分隔的格式存储在文本文件中
+                10) Blackhole：接受但不存储数据，并且检索总是返回一个空集。
+                11) Federated：把数据存在远程数据库中。
+
+            Memory引擎：
+                Memory存储引擎是专为非交易型应用，高速存取数据，数据100%的存在内存中永远不会写入磁盘。因此适用于临时的，需要频繁读写，对性能速度要求严格的应用中。
+            Merge引擎：
+                MERGE存储引擎将两个或两个以上的共同结构的MyISAM表行程一个单表。不支持事务，能有效地管理大型数据集。
+            MyISAM引擎：
+                MyISAM引擎是MySQL数据库默认的引擎，快速的载入数据和读取数据，不支持事务和灾难自动恢复数据。
+            NDB/MySQL Cluster引擎：
+                NDB/Cluster存储引擎是专为交易型应用，而且高可用性和系统崩溃恢复支持要求极为严格的应用设计的。无共享存储格式，内部采用了同步复制技术，以提供高达99.999%的可用性，数据主要存放在内存中，提供快速反应时间为查询和数据处理行动。
+            IBMDB2I引擎：
+               该引擎允许用户创建一个类似IBM i5平台的DB2格式表，允许通过操作MySQL环境，进入DB2数据进行数据操作。数据可以很容易的从MySQL数据库格式转换成DB2数据格式，方便应用从MySQL访问SB2。
+            InnoDB存储引擎：
+                InnoDB存储引擎是由Innobase开发公司所拥有，目前隶属于甲骨文公司。InnoDB存储引擎是用来处理交易型应用的，拥有自动崩溃恢复功能，保持数据的完整性，高并发控制和良好响应时间。InnoDB是完全开源的自由软件，其提供GPL许可同意任何人对其进行修改和重新分配。2008年4月，一种新的插件版本的InnoDB存储引擎正式发布，该版本具有新的数据压缩行的格式和更快的创建索引能力。
+            Maria引擎：
+                Maria引擎最初是要替代MyISAM引擎的下一代引擎，它与MyISAM功能一致，但是多提供故障自动恢复数据的功能，在未来的计划中它还要实现事务的支持和数据仓库功能。
+            PBXT引擎：
+                该引擎全称PrimeBase XT（PBXT），是由SNAP Innovation GmbH公司开发的。是专门为交易型应用设计的，支持崩溃自动恢复，大表处理良好，完美支持变长列大小（包括BLOB字段），单个文件存放单表结构，对表结构管理更加灵活可靠，PBXT目前计划在2009年6月RC。
+            ScaleDB引擎：
+                SaleDB存储引擎是由ScaleDB公司开发的，其目的是为提供事务应用的程序处理大数据量，同时对高可用性和可扩展性要求高的环境设计的。ScaleDB是基于共享磁盘格式数据库集群架构，使多个节点群集操作在单一的物理位置上的数据。ScaleDB适用于大型Web应用程序，它拥有适当的云计算能力，因为服务器动态可以添加和删除群集节点。SaleDB不是开源的引擎，目前仍旧是测试版。
+            XtraDB引擎：
+                XtraDB是由Percona是克隆的InnoDB存储引擎，但它自身也包括额外的功能，如支持多个回滚片段，附加性能诊断功能和提升执行速度功能，等等。
+            Calpont引擎：
+                Calpont是一个多线程，扩展的，分布式的存储引擎，专门为分析数据仓库设计。Calpont可以部署在单台服务器上或部署在多机的网络体系结构中，使其良好的向外扩展的能力，与能够真正具有运行大规模并行处理（MPP系统）的能力。Calpont采用列导向存储架构，大大降低的I/O解析查询。
+            InfoBright-BrightHouse引擎：
+                BrightHouse存储引擎是由Infobright公司开发的，BrightHouse存储引擎是专为大规模的数据仓库，传统的存档/历史系统设计的。可支持高达约30TB数据在一个数据库内的数据量级。BrightHouse采用列导向数据库的数据结构和压缩，平均压缩比10:1（包括所有额外的结构压缩），Infobright提供开源的社区版和专业的企业版。
+            Kickfire引擎：
+                Kickfire存储引擎是有Kickfire公司开发的，是为支持数据仓库高达约3TB（与目前的1.0产品）的环境设计的。Kickfire是一个基于专有设备的解决方案，不是开源的产品。该解决方案的主要区别是利用SQL芯片加速SQL执行速度，就像显卡利用图形驱动设备显示一样。Kickfire还利用以列为导向的数据库存储结构和数据的压缩，使数据平均压缩比2-3:1.Kickfire根据数据环境不同提供和众多解决方案。
+            TokuDB引擎：
+                TokuDB的Fractal Tree索引技术能针对大表提供高性能的插入/更新/删除操作，实习快速查询。TokuDB具有良好的可扩展性。TokuDB上应用在压缩数据，减少磁盘空间等应用上。
+
+
+        3. 如何理解Mysql主从库架构
+            复制原理：
+                Mysql 的复制是一个异步的复制过程，从一个MySQL节点（称之为Master）复制到另一个MySQL节点（称之Slave）。
+                在 Master 与 Slave 之间的实现整个复制过程主要由三个线程来完成，其中两个线程（SQL 线程和 I/O 线程）在 Slave 端，另外一个线程（I/O 线程）在 Master 端。 
+
+            要实现 MySQL 的复制，首先必须打开 Master 端的 Binary Log，因为整个复制过程实际上就是 Slave 从 Master 端获取该日志然后再在自己身上完全顺序的执行日志中所记录的各种操作。 
+              
+            看上去MySQL的Replication原理非常简单，总结一下： 
+                每个从仅可以设置一个主。 
+                主在执行sql之后，记录二进制log文件（bin-log）。 
+                从连接主，并从主获取binlog，存于本地relay-log，并从上次记住的位置起执行sql，一旦遇到错误则停止同步。 
+               
+            从这几条Replication原理来看，可以有这些推论： 
+                主从间的数据库不是实时同步，就算网络连接正常，也存在瞬间，主从数据不一致。 
+                如果主从的网络断开，从会在网络正常后，批量同步。 
+                如果对从进行修改数据，那么很可能从在执行主的bin-log时出现错误而停止同步，这个是很危险的操作。所以一般情况下，非常小心的修改从上的数据。 
+                一个衍生的配置是双主，互为主从配置，只要双方的修改不冲突，可以工作良好。 
+                如果需要多主的话，可以用环形配置，这样任意一个节点的修改都可以同步到所有节点。 
+
+
+    三、编程题（任选一题）
+>>> ================================== pass
+        1. 读取文本文件info.txt（100万个商户名称），打印重复的商户名称及重复的次数，并按重复次数排序输出。
+            # 可能有错误
+            import pandas as pd
+
+            df = pd.read_csv(f_name, sep=' ')
+            df.group_by('商户名称')['商户名称'].agg(['重复次数', 'count'])
+            df.sort_values(by=('重复次数', '商户名称'), ascending=False)
+
+
+
+        2. 写一个函数，能够遍历一个文件夹下的所有文件和子文件夹。
+            import os
+
+            def func(s_path):
+                s_dir = os.path.abspath(s_path)
+                for root, dirs, files in os.walk(s_dir):
+                    pass
+
+
+SWZT5862.jpg
+    二、编程题（选用你最熟悉的语言如java, javascript, python, c++）
+        1. 有这样几个变量：
+            char    name[16]="小涛";
+            int     order=2;
+            float   score=90.5;
+            char    result[128];
+            请把name, order, score这几个变量按格式拼接，放到result里：
+                "小涛同学考试成绩为90.5，全班排第 2 名"
+            （注意变量类型转换，字符串拼接，或者用语言提供的特殊方法）
+            >>> fmt = '{name}同学考试成绩为{score}，全班排第 {order} 名'
+            >>> result = fmt.format(name=name, score=score, order=order)
+
+
+        2. 实现一个字符串反转的函数
+            （例如：输入：'12345678'    输出：'87654321'）
+            同 GLYV6981.jpg --> 第2题
+
+
+        3. 在扑克牌游戏中，需要实现一个查找顺子的算法：（连续的数字即为顺子）
+            随机发N张牌，从中挑选最长顺子，并返回其长度，如果没有顺子返回0
+            int cards[16] = {12,3,4,10,6,5,6,8,11,9,11,11,9,12,1};
+            int getMaxShunZiLength(int cards[], int cardlen) {...}
+            （对于上面给出的数据，应该返回最长顺子：8, 9, 10, 11, 12的长度5）
+            def getMaxShunZiLength(cards, cardlen):
+                ''' 查找顺子（连续的数字即为顺子） '''
+                arr = sorted(set(cards))
+                max_n, m = (0, len(arr))
+                for i in range(m-1):
+                    n, j = (0, 1)
+                    x = arr[i]
+                    if x+1 == arr[i+1]:
+                        # 有顺子
+                        while i+j < m and x+j == arr[i+j]:
+                            j = j + 1
+                        if max_n < j:
+                            max_n = j
+                return max_n
+            
+            >>> cards = (12,3,4,10,6,5,6,8,11,9,11,11,9,12,1)
+            >>> getMaxShunZiLength(cards, len(cards))
+            5
+
+
+TASF6751.jpg
+    同 DGWR3850.jpg
+
+
+TMBP7312.jpg
+    7. python判断变量类型时，判断一个变量的类型时为什么不使用type()，而是用isinstance()方法？
+        同 AEJS9168.jpg --> 第3题
+
+
+    8. 写一个函数，输入一个字符串，返回倒序排列的结果。如：
+        string reverse('abcdef')，返回：'fedcba'
+        def my_reverse(msg):
+            arr = list(msg)
+            s = ''.join(arr[::-1])
+            return s
+
+
+    9. 请用自己的算法，按升序合并如下两个list，并去除重复的元素：
+        list1 = [2, 3, 8, 4, 9, 5, 6]
+        list2 = [5, 6, 10, 17, 11, 2]
+        
+        def func(arr_a, arr_b):
+            ''' 升序合并两个list，并去除重复的元素 '''
+            arr = []
+            arr.extend(arr_a)
+            arr.extend(arr_b)
+            arr = sorted(set(arr))
+            return arr
+
+
+TPCV3678.jpg
+    7. 一个函数接受文件夹的名称作为输入参数，返回该文件夹中所有文件的全路径。请补充缺失的代码。
+        def print_directory_contents(sPath):
+            import os
+
+            s_dir = os.path.abspath(sPath)
+            arr_file = [os.path.join(s_dir, s) for s in os.listdir(s_dir)]
+            arr = [
+                    s
+                    for s in arr_file
+                        if os.path.isfile(s)
+                    ]
+            return arr
+
+
+    8. 阅读下面的代码，写出A0, A1至An的最终值
+        A0 = dict(zip(('a','b','c','d','e'),(1,2,3,4,5)))
+        A1 = range(10)
+        A2 = [i for i in A1 if i in A0]
+        A3 = [A0[s] for s in A0]
+        A4 = [i for i in A1 if i in A3]
+        回答：
+            A0      {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}
+            A1
+                py2:    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                py3:    迭代器对象range(0, 10)
+            A2      []
+            A3      [1, 2, 3, 4, 5]的队列，但顺序是随机的
+            A4      [1, 2, 3, 4, 5]
+
+
+
+TRIZ2642.jpg
+    链接：https://www.cnblogs.com/lilin567/p/7417095.html
+    1. 填空题
+        (01) 获取随机数的方法：_________________
+            Math.random
+        (02) JS中将一个变量强制改为浮点类型的方法：____________________
+            parseFloat(String)
+        (03) 根据id获取元素的原生js方法：_____________________
+            getElementById();
+        (04) 将文档声明为HTML5文档类型，需要在文档头添加：________________
+            <!doctype html>
+        (05) Chrome浏览器的私有样式前缀：_____________________
+            -webkit-
+        (06) CSS3 设置圆角的属性名：________________________
+            border-radius
+        (07) CSS3 中，#是根据________________来选择元素，.是根据_______________来选择元素。
+            id, class 
+        (08) form标签特有的属性请列举三个：________、________、________。
+            action, method, enctype, target
+        (09) 正则表达式中，$是什么意识：________
+            从字符串的末尾开始从后向前匹配
+        (10) typeof'123'返回：________
+            number
+    2. 简答题
+        (1) 自定义一个浏览器兼容的事件绑定方法需要注意哪些问题？
+            对以存在的事件绑定方法进行判断。
+            能兼容各主流浏览器。
+            IE中没有捕获阶段，只能处理冒泡阶段。
+
+
+        (2) 设计一个布局方案，使得页面在pc端和pad端显示为一行三列，在手机端为一列三行。
+        样式：
+            .parent-fix {
+                margin-left:-20px;
+                }
+            .parent {
+                display:table;
+                width:100%;
+                table-layout:fixed;
+                }
+            .column {
+                display:table-cell;
+                padding-left:20px;
+                }
+            @media screen and (max-width:320px){
+                .parent-fix {
+                margin-left: 0;
+                }
+            .parent {
+                display:block;
+                width:100%;
+                }
+            .column {
+                display:block;
+                padding-left:0;
+                }
+            
+        结构：
+            <div class="parent-fix">
+                <div class="parent">
+                    <div class="column"></div>
+                    <div class="column"></div>
+                    <div class="column"></div>
+                 </div>
+            </div>
+
+
+        (3) 请解释JSONP的工作原理。
+            JSONP是处理跨域资源访问的。
+            JSONP的原理是利用html页面中的script标签可跨域的原理，利用<script>标签向服务器端请求一段JS代码，
+            然后，执行这段js代码，实现跨域的过程。
+
+
+        (4) display和position都有哪些值？分别列举一下这些值的用途。
+            display：block/inline/inline-block /table/table-cell/none
+            position: relative/absolute/fixed/static
+            display:block;/*当前元素以块级形式显示，默认宽度为父元素，可设定宽高，换行显示*/
+            display:inline;/*当前元素以行内形式显示，默认宽度为内容宽度，不可设宽高，同行显示*/
+            display:inline-block;/*显示时，默认宽度为内容宽度，可设宽高，同行显示*/
+            display:table;/*显示规则和block相同，但是样式为table的样式*/
+            display:table-cell;/*以table 单元格的样式显示*/
+            display:none;/*元素小时，位置也不占*/
+            position:relative;/*当前元素被设为相对定位，元素在文档流中，百分比的参照物是元素本身*/
+            position:absolute;/*当前元素被设为绝对定位，元素脱离文档流，定位参照物：第一个定位祖先/根元素*/
+            position:fixed;/*当前元素被设为固定定位，默认宽度为内容宽度，脱离文档流，参照物是视窗*/ 
+
+
+        (5) 地址栏输入一个地址后，输入回车，描述一下这时开始，浏览器做类什么。
+            同 NLCH3509.jpg --> 第6题
+
+
+    3. 应用题
+        (1) 创建一个js类，模拟实现方法的重载。
+            function A() {
+                this.a=null;
+                this.b=null;
+            }
+
+            var pro = A.prototype;
+            //模拟重载
+            pro.add = function() {
+                if (arguments.length==1) {
+                    console.log(arguments[0]);
+                }
+                if (arguments.length==2) {
+                    result = arguments[0]+arguments[1];
+                    console.log(result);
+                }
+            }
+
+            var a = new A();
+            a.add(1);
+            a.add(1,2);
+
+
+        (2) js中也会有排序的需求，用js实现一个标准的排序算法，对某个数字数组进行由低到高的排序。
+            function sort_01(a) {
+                var i,j;
+                for (i=0;i<a.length;i++) {
+                    var temp;
+                    var flag=0;
+                    for (j=0;j<a.length;j++) {
+                        if (a[j]>a[j+1]) {
+                            temp = a[j+1];
+                            a[j+1]=a[j];
+                            a[j]=temp;
+                            flag=1;
+                        }
+                    }
+                    if(flag==0) break;
+                }
+                return a;
+            }
+            
+            var b = [2,3,8,3,1,5];
+            sort_01(b);
+            console.log(b);
+
+
+    4. 编程题
+        用html, css和js模拟实现一个下拉框，使得下拉框在各个浏览器下的样式和行为完全一致。说出你的设计方案，并且重点说吗功能设计时要考虑的因素。
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Document</title>
+                    <style type="text/css">
+                        p,ul {
+                            margin: 0;
+                        }
+                        ul {
+                            padding: 0;
+                        }
+                        a {
+                            text-decoration: none;
+                            color: #000;
+                        }
+                        .btn {
+                            border: 1px solid #000;
+                            width: 100px;
+                            text-align: center;
+                            margin-bottom: 0.5px;
+                            cursor: pointer;
+                            padding: 2px 0;
+                        }
+                        .down {
+                            width: 100px;
+                            border: 1px solid #000;
+                            text-align: center;
+                            display: block;
+                        }
+                        .l_sm {
+                            border: 1px solid grey;
+                            list-style: none;
+                            padding: 2px 0;
+                            cursor: pointer;
+                        }
+                        .l_sm:hover {}
+                    </style>
+                </head>
+                <body>
+                    <p class="btn" id="btn">点击</p>
+                    <ul class="down" id="show" >
+                        <li class="l_sm"><a href="#">第一项</a></li>
+                        <li class="l_sm"><a href="#">第二项</a></li>
+                        <li class="l_sm"><a href="#">第三项</a></li>
+                        <li class="l_sm"><a href="#">第四项</a></li>
+                    </ul>
+                    <script type="text/javascript">
+                        var btn = document.getElementById("btn");
+                        var show = document.getElementById("show");
+                 
+                        btn.addEventListener("click", function() {
+                            var style = window.getComputedStyle(show).display;
+                            if(style=="block"){
+                                show.style.display = "none";
+                            } else {
+                                show.style.display = "block";
+                            }
+                        });
+                    </script>
+                </body>
+            </html>
+
+
+UMYV5615.jpg
+    一、基础知识：
+        1. 在普通pc机上，这个数组大概站多大内存：int a[1000000]
+            32位pc机，3.82MB。
+            64位pc机，7.63MB。
+
+
+        2. 普通pc机上，1秒钟可进行多少次空的for循环，大概估计即可
+            for循环需要的语句：
+                1) 读取for循环的判断语句的变量
+                    时钟周期=i
+                2) 无条件转移指令jmp
+                    时钟周期=j
+            因为是空的for循环，所以除了第一次需要将变量从内存读入cpu寄存器，其它情况，变量始终在cpu的寄存器里。
+            1秒钟可执行的for循环 = (cpu时钟周期 - i) / j
+
+
+        3. 进程和线程之间有什么区别和联系？ 做过多线程编程吗？线程加锁的作用是什么？
+            进程和线程都是由操作系统所体会的程序运行的基本单元，系统利用该基本单元实现系统对应用的并发性。
+            线程的划分尺度小于进程，使得多线程程序的并发性搞。 
+            进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。 
+            每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。 
+            从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。这就是进程和线程的重要区别。 
+            进程（Process）是最初定义在Unix等多用户、多任务操作系统环境下用于表示应用程序在内存环境中基本执行单元的概念。以Unix操作系统为例，进程是Unix操作系统环境中的基本成分、是系统资源分配的基本单位。Unix操作系统中完成的几乎所有用户管理和资源分配等工作都是通过操作系统对应用程序进程的控制来实现的。
+
+            做过多线程编程。
+
+            线程加锁的作用：
+                串行操作，临界区的资源。
+
+
+        4. 写出下面程序的运行结果（32位机器）：
+            void func(char *str) {
+                printf("%d %d\n", sizeof(str), strlen(str));
+            }
+
+            main() {
+                char a[]="123456789";
+                printf("%d ", sizeof(a));
+                func(a);
+            }
+        5. 指定一个目录中，怎么查找文件名包含特定字符串的文件？
+            （用命令行或者其他方法）
+        6. 指定一个目录中，怎么查找内容包含特定字符串的文件？
+            （用命令行或者其他方法）
+        7. 在浏览器中输入www.baidu.com，从输入到页码显示出来，期间发生了哪些过程，详细描述一下（口述）
+        8. 谈一下你对设计模式的认识和理解，并简述几个你了解的设计模式（口述）
+
+
+UPXT9452.jpg
+    1. 如何判断一个python对象的类型？
+    2. Python里面如何生成随机数？
+    3. 请写出匹配ip的python正则表达式
+    4. 写尽可能多的str对象的方法
+    5. 全局变量与局部变量的区别，如何中function里面给一个全局变量赋值？
+    6. tuple和list区别，有两个list，b1=[1,2,3]，b2=[2,3,4]，写出合并代码
+    7. 请写出一段python代码实现删除一个list里面的重复元素。l = [1,1,2,3,4,5,4]
+    8. 写出如下list的交集与差集代码，b1=[1,2,3]，b2=[2,3,4]
+    9. 请写出一段python代码实现list里排序a=[1,2,4,2,4,5,7,10,5,5,7,8,9,0,3]
+
+
+UTSI4088.jpg
+    1. 简述TCP断开握手的过程
+    2. 简述 进程、线程、协程的含义。
+    3. 简述静态方法、类方法、实现方法的区别？
+    4. dict的items()方法与iteritems()方法的不同。
+    5. 请简述魔法函数__new__、__call__、__rper__、__str__、__setattr__、__getattr__的含义是什么？
+    6. django中如何读取和保存session，整个session的运行机制是什么？
+
+
+VFXA6549.jpg
+    以下的题目如果是编程题，则可以任选你擅长的语言即可，也可以直接写伪代码。
+    1. 进程和线程的区别是什么？
+    2. A1, A2, ..., An 为n个整数，编写一个程序求出其最大值。
+    3. 找到一个目录下（包含子目录），所有的以”盈码基金“开头的，文件名包含
+        今天的日期的文件（日期格式为yyyy-mm-dd）。注意：文件名的编码均为utf-8。
+    4.  有两个字符串s1和s2，我们称对字符串的一次添加/删除/修改一个字符为一次操作。
+        如果我们可以采用最少的操作次数，把s1变成s2，这个操作次数称为s1和s2
+        之间的编辑距离，表示为ed(s1, s2)。比如s1="abc"，s2="bcd"，ed(s1, s2)=2。
+        请编写一个程序求出两个字符串之间的编辑距离。
+
+
+VTQT2643.jpg
+    同 GLYV6981.jpg
+
+
+VVCU3059.jpg
+    13. 根据当前栏目ID，生成面包屑。
+        栏目表结构：
+        CREATE TABLE `cms_column` (
+                `column_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '栏目ID',
+                `column_name` varchar(45) DEFAULT NULL COMMENT '栏目名称',
+                `column_path` varchar(255) NOT NULL DEFAULT '/' COMMENT '栏目目录',
+                `parent_id` int(11) DEFAULT 'O' COMMENT '父ID',
+                `url` varchar(255) NOT NULL COMMENT `栏目URL',
+                PRIMARY KEY (`column_id`)
+                )
+        要求输出面包屑格式：    首页 > 一级栏目 > 二级栏目 > ... > 当前栏目
+    14. 写出获得学生成绩报表的sql语句，涉及的数据库表如下：
+        。班级表（表名：classes）：
+            class_id    class_name
+            ----------------------
+            1           1班
+            2           2班
+            3           4班
+
+        。课程表（表名：lesson）：
+            lesson_id   lesson_name
+            ----------------------
+            1           语文
+            2           数学
+            3           化学
+            4           物理
+
+        。学生表（表名：student）：
+            student_id  student_name    class_id
+            ------------------------------------
+            1           张三            1
+            2           李四            2
+            3           王强            1
+            4           李明            3
+
+        。成绩表（表名：scores）：
+            score_id    student_id      lesson_id   score
+            ---------------------------------------------
+            1           1               1           87
+            2           1               2           67
+            3           2               1           56
+            4           2               2           90
+            5           3               2           88
+            
+        结果要求：
+
+
+XOHT9171.jpg
+    11. MySQL中 delete from 表名 和truncate table 表名 的区别
+    12. 在MySQL中，要生成下列结果，SQL语句如何实现？
+        表名：com_result
+        表内容：
+            rq              shengfu
+            -------------------------
+            2017-04-09      胜
+            2017-04-09      胜
+            2017-04-09      负
+            2017-04-09      负
+            2017-04-10      胜
+            2017-04-10      负
+            2017-04-10      负
+        生成结果：
+            rq              胜      负
+            --------------------------
+            2017-04-09      2       2
+            2017-04-10      1       2
+
+
+YJXH6200.jpg
+    1. 列表(list)和元组(tuple)的区别
+    2. 集合(set)是怎样的一种数据类型，何时使用？
+    3. 请在下面的空白处填写运行结果
+        >>> seq = [1,2,3,4]
+        >>> seq[:2]
+        ________________________________________
+        >>> seq[-2:]
+        ________________________________________
+        >>> seq[10:]
+        ________________________________________
+        >>> seq[::-1]
+        ________________________________________
+        >>> seq[:]
+        ________________________________________
+        >>> id(seq[:]) == id(seq)
+        ________________________________________
+    4. 优化以下程序
+        result = []
+        for x in range(10):
+            result.append(x**2)
+        print(result)
+    5. 函数、类方法定义中如何实现可选参数、可选关键词参数
+    6. 请解释classmethod和staticmethod的区别
+    7. 请给出下列程序的运行结果
+        >>> x=0.5
+        >>> whild x!=1.0:
+        ...     print(x)
+        ...     x+=0.1
+    8. 请写一段程序，包含迭代器和生成器的使用
+    9. 请根据age分别对 student_tuples 及 student_objects进行排序
+        >>> student_tuples = [
+

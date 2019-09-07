@@ -1,0 +1,360 @@
+1、mvc是一种设计模式。mvc是model  ‘-view-controler的简称，既模型-视图-控制器。
+   模型：模型表示业务数据和业务处理。一个模型能为多个视图提供数据，这样提高了应用程序的重用性
+   视图：视图是用户看到并与之交互的界面。视图向用户显示相关的数据，并接受用户的输入。视图不进行任何逻辑的处理
+   控制器：当用户单击web页面中的提交按钮时，控制器接受请求并调用相应的模型去处理请求
+  mtv和mvc差不多，就是mtv中的t是mvc中v，mtv中的v就是mvc中的c
+2、flask是一个使用python编写的轻量级web应用框架，使用jinja2做模板引擎，其提供了比较完善的web服务器的基本功能，同时且建议用户自由选择扩展的技术，
+   它适合做app后台或基于json通信的ajax应用
+   django提供了一系列比较成熟的解决方案，鼓励用户使用这些现成的解决方案快速开发系统
+3、很久不直接写mysql的命令了，因为之前开发过程中都是用ORM模型驱动数据库的，一般不怎么用原生sql语句写，这样可以减少开发成本。所以就只记得一些比较简单的
+   命令，比如登陆mysql mysql -u 用户名 -p用户密码 还有就是show databases 显示数据库 create datebase 库名 drop datebase 库名这样的语句
+4、这个pyQuery和jsonpath这两个都不怎么常用，就不怎么记得了，常用的就是用正则表达式还有xpath、buautifulsoup这样的技术实现网页信息抽取
+5、redis和memcache这两个都是将数据放在内存中，都是内存数据库，不过memcache还可以用于缓存其它东西，例如图片、视频等
+   redis不仅仅支持简单的k/v类型的数据，同时还提供list,set,hash等数据结构的存储
+   memecache把数据全部存在内存中，断电后会断掉，数据不能超过内存大小
+   redis有部分存在硬盘里，这样能保证数据的持久性，支持数据的持久性
+6、session的原理在于，服务器可以为客户端创建并维护一个所谓的session对象，用于存放数据，在创建session对象的同时，服务器将会为该session对象产生一个
+  唯一的编号，这个编号称为sessionID,服务器以cooiie的方式将sessionID存放在客户端中，当浏览器再次访问该服务器的时候，会将sessionID作为cookie信息带
+  服务器，服务器可以通过该sessionID检索到以前的session对象，并将其进行访问。
+  我们把用户打开一个浏览器访问某个应用开始，到关闭浏览器为止交互过程称为一个会话
+
+  cookie是我们在浏览器中，经常涉及到数据的交换，比如你登录邮箱，登录一个页面。我们经常会在此时设置30天内记住我，或者自动登录选项。
+  那么它们是怎么记录信息的呢，答案就是今天的主角cookie了，Cookie是由HTTP服务器设置的，保存在浏览器中，但HTTP协议是一种无状态协议，
+  在数据交换完毕后，服务器端和客户端的链接就会关闭，每次交换数据都需要建立新的链接
+
+7、常见的正则表达式的用法：\w匹配字母或者数字下划线 \s匹配任意的空白符  \d匹配数字 \b匹配单词的开始或结束
+   xml最大的优点就有大量的工具可以分析，转换，和选择性的提取文档中的数据。XPath是这些最强大的工具之一
+
+   1、xpath的用法：XPath 使用路径表达式在 XML 文档中选取节点 
+
+   2、pyquery库是jQuery的Python实现，可以用于解析HTML网页内容，.可加载一段HTML字符串，或一个HTML文件，或是一个url地址，根据HTML标签来获取元素，
+
+   3、JSONPath - 是xpath在json的应用
+   如果可以使用xpath来解析json，以下的问题可以被解决：
+
+   1，数据不使用特殊的脚本，可以在客户端交互的时候被发现并获取。
+   2，客户机请求的JSON数据可以减少到服务器上的相关部分，这样可以最大限度地减少服务器响应的带宽使用率。
+      如果我们愿意，这个可以解析json数据的工具会变得有意义。随之而来的问题是它如何工作，jsonpath的表达式看起来怎么样
+      xpath  Jsonpath
+      /	     $	表示根元素
+      //     ..	递归下降，JSONPath是从E4X借鉴的
+      .	     @	 当前元素
+      $.store.book[0].title 或者这样 $['store']['book'][0]['title']    Jsonpath表达式
+   4、BeautifulSoup是Python的一个库，最主要的功能就是从网页爬取我们需要的数据。BeautifulSoup将html解析为对象进行处理，
+      全部页面转变为字典或者数组，相对于正则表达式的方式，可以大大简化处理过程。
+      BeautifulSoup将复杂的html文档转换为树形结构，每一个节点都是一个对象，这些对象可以归纳为几种：
+      （1）Tag Tag相当于html种的一个标签， 对于Tag，有几个重要的属性， 
+		name:每个Tag对象的name就是标签本省的名称； 
+                attrs:每个Tag对象的attrs就是一个字典，包含了标签的全部属性。
+      （2）NavigableString
+ 		Comment是一种特殊的NavigableString，对应的是注释的内容，但是其输出不包含注释符。
+8、我们可以用requests和beautifulsoup完成一个实用的爬虫，但如果想大规模爬取的话，我们需要学习Scrapy这个优秀Python框架
+   爬虫是我自定义的类，用于让Scrapy从某个网站提取信息。需要定义起始的URL（start_urls)，如何跟踪链接以及如何检索网页内容并进行提取。
+   Scrapy使用基于Xpath或CSS表达式的Scrapy Selectors提取网页数据。response.css('img').xpath('@src').extract() 
+   假设你不满足爬取起始页面，想继续爬取起始页面中你感兴趣的链接，那么我么就需要进一步改写之前的爬虫了。
+   这里我们使用parse函数获取网页的url，然后通过scrapy.Request对获取的每一个url调用parse_dir_contents函数，提取数据。
+ 
+   PySpider：一个国人编写的强大的网络爬虫系统并带有强大的WebUI。
+   Selenium也是一个用于Web应用程序测试的工具。Selenium测试直接运行在浏览器中，就像真正的用户在操作一样。
+  PhantomJS是一个无界面的,可脚本编程的WebKit浏览器引擎。它原生支持多种web 标准：DOM 操作，CSS选择器，JSON，Canvas 以及SVG。用来处理香渲染JS处理的页面
+9、linux操作命令：Linux提供了大量的命令，利用它可以有效地完成大量的工作，如磁盘操作、文件存取、目录操作、进程管理、文件权限设定等。
+   date 显示日期的指令  sync 数据同步写入磁盘 pwd 显示当前所在目录 mkdir建立新目录 redir 删除空的目录 ls档案与目录的显示 cp 复制档案或者目录 rm移除档案
+   或目录 mv移动档案于与目录或更名 basename ,dirname取得路径的文件与目录名
+10、pandas是基于numpy的一种工具，该工具是为了解决数据分析任务而创建。pandas纳入了大量库和一些标准的数据模型，提供了高效地操作大型数据集所需的工具
+   pandas提供了大量能使我们快捷便捷处理数据的函数和方法，数据结构是series:一维数组，与numpy的一维数组array类似。二者与python基本的数据结构list也很相近
+   其区别是list中的元素可以是不同的数据类型，而array和series中则只允许存储相同的数据类型，这样可以更加有效的使用内存，提高运算效率
+11、pyecharts是一个用于生成echarts图表的类库。echars是百度开源的一个数据可视化js库，主要用于数据可视化
+12、matplotlib是一个python的2D绘图库，它以各种硬拷贝格式和跨平台的交互式环境生成出版质量级别的图形，可以绘直方图，条形图，散点图等
+13、select name,age from person
+    where age>
+   (
+     select age from person
+     where  name = '小明'
+    )
+
+
+    select name from person
+    where countryid in
+    (
+   select countryid from country
+   where countryname ='小明'
+    )
+
+   select name from person
+   where countryid = some
+   (
+    select countryid from country
+    where countryname = '小明'
+   )
+
+   select name from person
+   where countryid > all
+   (
+    select countryid from country
+    where countryname = '小明'
+    )
+
+   select * from person
+   where exists
+   (
+    select 1
+   )
+  
+  select * from person
+  where exists
+  (
+   select * from person
+   where person_id = 100
+)
+14.git常用命令
+   git add a.txt , git commit , git status , git diff a.txt , git log ,git reset -hard HEAD~100,
+15、nginx是一个高性能的WEB和方向代理服务器，正向代理：用户去访问一个代理服务器，这个代理服务器去帮我们访问我们访问不了的网站内容
+    负载均衡：负载均衡是多台服务器以对称的方式组成一个服务器集合，每台服务器都具有等价的地位，都可以单独对外提供服务而无须其它服务器的辅助。
+    通过某种负载分担技术，将外部发送来的请求按照事先设定分配算法分配到对称结构中的某一台服务器上，而接收到请求的服务器独立地回应客户的请求
+   
+    作用：均衡负载能够平均分配客户请求到服务器列阵，藉此提供快速获取重要数据，解决大量并发访问服务器问题
+
+    算法有四种：1、weight轮询（默认）每个请求按时间循序逐一分配到不同的后端服务器，如果后端某台服务器宕机，故障系统被自动删除，使用户访问不受影响
+               weight,指定轮询权值，weigt越大，分配到的访问几率越高，主要用于后端每个服务器性能不均的情况下
+               2、ip_hash：每个请求按访问ip的hash结果分配，这样用于同一个ip的访问固定访问一个后端服务器，有效解决了动态网页存在的session共享问题
+               3、fair:比上面两个更加智能的负载均衡算法，此种算法可以依据页面大小和加载时间长短智能地运行进行负载均衡，也就是根据后端服务器的响应
+                时间来分配请求，响应时间短的优化分配。以nginx本身不支持fair的，如果选哟使用这个调度算法，必须下载nginx的upstream_fair模块
+               4、url_hash:按照访问url(统一资源定位器)的hash结果来分配，使每个url定向到同一个后端服务器，可以进一步提高后端缓存服务器的效率。
+               ngginx本身不支持url_hash的，如果需要使用这种调度算法，必须安装nginx的hash软件包
+
+16、svn是一个开放源代码的版本控制系统，svn服务器有两种运行方式：独立服务器和借助apache运行，svn存储版本数据有两种方式：BDB(一种事务安全型表类型)
+    FSFS(一种不需要数据库的存储系统)，因为BDB方式在服务器中断时，有可能锁住数据，所以还是FSFS方式安全一点
+
+17、Restful:可以用一个url指向它，每种资源对应一个特定的url，要获取资源，访问它的url就可以了，因此url就成了每一个资源的地址或独一无二的标识符
+    所谓“上网”,就是与互联网上一系列的资源互动，调用它的url
+    表现层：它的具体表现形式，应该在HTTP请求的头信息中使用Accept和Content-Type字段指定，这两个字段才是对表现层的描述
+    大概就是，每一种url代表一种资源，客户端和服务器之间，传递这种资源的某种表现层，客户通过四个HTTP动词，对服务器端资源进行操作，实现表现层状态转化
+18、超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息，HTTP协议以明文方式发送内容，不提供任何方式的数据加密，
+    如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息
+    为了解决HTTP协议的这一缺陷，需要使用另一种协议：安全套接字层超文本传输协议HTTPS，为了数据传输的安全，HTTPS在HTTP的基础上加入了SSL协议，
+    SSL依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密
+    
+    HTTP协议传输的数据都是未加密的，也就是明文的，因此使用HTTP协议传输隐私信息非常不安全，为了保证这些隐私数据能加密传输，
+    于是网景公司设计了SSL（Secure Sockets Layer）协议用于对HTTP协议传输的数据进行加密，从而就诞生了HTTPS。简单来说，
+    HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全。
+
+    HTTPS和HTTP的区别主要如下：
+
+　　1、https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。
+
+　　2、http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+
+　　3、http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。
+
+　　4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。
+
+   客户端在使用HTTPS方式与Web服务器通信时有以下几个步骤，如图所示。
+
+　　（1）客户使用https的URL访问Web服务器，要求与Web服务器建立SSL连接。
+
+　　（2）Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。
+
+　　（3）客户端的浏览器与Web服务器开始协商SSL连接的安全等级，也就是信息加密的等级。
+
+　　（4）客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。
+
+　　（5）Web服务器利用自己的私钥解密出会话密钥。
+
+　　（6）Web服务器利用会话密钥加密与客户端之间的通信。
+
+
+    一次HTTP操作称为一个事务，其工作过程可分为四步：
+
+1）首先客户机与服务器需要建立连接。只要单击某个超级链接，HTTP的工作开始。
+
+2）建立连接后，客户机发送一个请求给服务器，请求方式的格式为：统一资源标识符（URL）、协议版本号，后边是MIME信息包括请求修饰符、客户机信息和可能的内容。
+
+3）服务器接到请求后，给予相应的响应信息，其格式为一个状态行，包括信息的协议版本号、一个成功或错误的代码，后边是MIME信息包括服务器信息、实体信息和可能的内容。
+
+4）客户端接收服务器所返回的信息通过浏览器显示在用户的显示屏上，然后客户机与服务器断开连接。
+
+  如果在以上过程中的某一步出现错误，那么产生错误的信息将返回到客户端，有显示屏输出。对于用户来说，这些过程是由HTTP自己完成的，用户只要用鼠标点击，
+  等待信息显示就可以了
+
+19、Mysql常见索引有：主键索引、唯一索引、普通索引、全文索引、组合索引
+普通索引 :
+
+这是最基本的索引类型，而且它没有唯一性之类的限制。普通索引可以通过以下几种方式创建：
+
+创建索引，例如CREATE INDEX <索引的名字> ON tablename (列的列表);create index(索引的名字) on tablename(列的列表名)
+
+修改表，例如ALTER TABLE tablename ADD INDEX [索引的名字] (列的列表); alter table tablename add index [索引的名字] （列的列表）
+
+创建表的时候指定索引，例如CREATE TABLE tablename ( [...], INDEX [索引的名字] (列的列表) );create table tablename ([...],index [索引的名字] [列的列表])
+
+唯一性索引:
+
+这种索引和前面的“普通索引”基本相同，但有一个区别：索引列的所有值都只能出现一次，即必须唯一。唯一性索引可以用以下几种方式创建：
+
+创建索引，例如CREATE UNIQUE INDEX <索引的名字> ON tablename (列的列表);create unique index (索引的名字) on tablename (列的列表)
+
+修改表，例如ALTER TABLE tablename ADD UNIQUE [索引的名字] (列的列表);alter table tablename add unique [索引的名字](列的列表)
+
+创建表的时候指定索引，例如CREATE TABLE tablename ( [...], UNIQUE [索引的名字] (列的列表) );create table tablename ([...],unique [索引的名字]（列的列表）)
+
+
+主键 :
+
+主键是一种唯一性索引，但它必须指定为“PRIMARY KEY”。如果你曾经用过AUTO_INCREMENT类型的列，你可能已经熟悉主键之类的概念了。
+主键一般在创建表的时候指定，例如“CREATE TABLE tablename ( [...], PRIMARY KEY (列的列表) );
+create table tablename ([...],primary key (列的列表)) ”。但是，我们也可以通过修改表的方式加入主键，
+例如“ALTER TABLE tablename ADD PRIMARY KEY (列的列表);
+alter table tablename add primary key (列的列表) ”。每个表只能有一个主键。
+ 
+全文索引:
+
+MySQL从3.23.23版开始支持全文索引和全文检索。在MySQL中，全文索引的索引类型为FULLTEXT。全文索引可以在VARCHAR或者TEXT类型的列上创建。
+它可以通过CREATE TABLE命令创建，也可以通过ALTER TABLE或CREATE INDEX命令创建。对于大规模的数据集，
+通过ALTER TABLE(或者CREATE INDEX)命令创建全文索引要比把记录插入带有全文索引的空表更快。
+本文下面的讨论不再涉及全文索引，要了解更多信息，请参见MySQL documentation。
+
+为了提高搜索效率，我们需要考虑运用多列索引。如果为firstname、lastname和age这三个列创建一个多列索引，MySQL只需一次检索就能够找出正确的结果!
+下面是创建这个多列索引的SQL命令：
+
+ALTER TABLE people ADD INDEX fname_lname_age (firstname,lastname,age);
+alter table people add index fname_lname_age (firstname,lastname,age)
+由于索引文件以B-树格式保存，MySQL能够立即转到合适的firstname，然后再转到合适的lastname，最后转到合适的age。在没有扫描数据文件任何一个记录的情况下，
+MySQL就正确地找出了搜索的目标记录!
+
+在性能优化过程中，选择在哪些列上创建索引是最重要的步骤之一。可以考虑使用索引的主要有两种类型的列：在WHERE子句中出现的列，在join子句中出现的列
+
+
+普通索引(INDEX)：最基本的索引，没有任何限制
+唯一索引(UNIQUE)：与"普通索引"类似，不同的就是：索引列的值必须唯一，但允许有空值。
+主键索引(PRIMARY)：它 是一种特殊的唯一索引，不允许有空值。
+全文索引(FULLTEXT )：仅可用于 MyISAM 表， 用于在一篇文章中，检索文本信息的, 针对较大的数据，生成全文索引很耗时好空间。
+组合索引：为了更多的提高mysql效率可建立组合索引，遵循”最左前缀“原则。
+
+那么这个 会员编号，作为主键，使用 PRIMARY
+会员姓名 如果要建索引的话，那么就是普通的 INDEX
+会员身份证号码 如果要建索引的话，那么可以选择 UNIQUE （唯一的，不允许重复）
+会员备注信息 ， 如果需要建索引的话，可以选择 FULLTEXT，全文搜索。
+
+单列索引：即一个索引只包含单个列，一个表可以有多个单列索引，但这不是组合索引。
+组合索引：即一个索包含多个列。
+
+18、（1）伪装浏览器，在浏览器在发送请求的时候，会附带一部分浏览器及当前系统环境的参数给服务器，这些数据放在http请求的hearder部分
+         服务器会通过判断U—A的值区分不同浏览器。
+    （2）通过访问频率爬虫，如果爬取速度过快，会要输入验证码，或者封IP，面对这种，可以使用换IP，我们可以使用代理IP转发我们的请求，或者是识别验证码
+         出去换代理IP，还可以识别验证码，这样的接口我们可以通过手动输入识别验证码，也可以通过人肉打码服务，或者通过OCR做机器识别，
+         对验证码进行二值化，分词，模式训练之后，再对验证码进行识别
+     （3）多账号登录（4）动态加载,通过异步加载，用selenium+phantomJs（5）蜜罐，确认是爬虫之后，返回虚假数据
+使用代理IP，在IP被封掉之前或者封掉之后迅速换掉该IP，这种做法主要需要大量稳定的代理IP，代理IP有免费的，可以花点时间去找，但是量不大，而且不稳定，大量稳定的一般需要购买，
+购买是另一个问题了，淘宝大把就不深入说了。购买之后可以使用一些支持代理的采集软件，这里的技巧是循环使用，在一个IP没有被封之前，就换掉，过一会再换回来。
+这样就可以使用相对较少的IP进行大量访问。
+。
+19、python3和python2有什么区别？
+python2中print是一个语句，不论想输出什么，直接放到print关键字后面即可。
+python3里，print()是一个函数，像其他函数一样，print()需要你将要输出的东西作为参数传给它。
+
+python２有两个全局函数可以把对象强制转换成字符串:unicode()把对象转换成unicode字符串，还有str()把对象转换为非Unicode字符串。
+Python3只有一种字符串类型，unicode字符串，所以str()函数即可完成所有的功能。
+Python2中，字典对象has_key()方法测试字典是否包含指定的键。python3不再支持这个方法，需要使用in.
+
+从python2到python3，标准库里的一些模块已经被重命名。还有一些相互关联的模块也被组合或则重新组织，使得这种关联更有逻辑性。
+
+20、面对对象编程
+OOP编程是利用“类”和“对象”来创建各种模型来实现对真实世界的描述，使用面向对象编程的原因一方面是因为它可以使程序的维护和扩展变得更简单，
+并且可以大大提高程序开发效率 ，另外，基于面向对象的程序可以使它人更加容易理解你的代码逻辑，从而使团队开发变得更从容。
+
+21、inner join,left join,right join的区别是？
+left\right join是外部连接，inner join是内连接
+外部连接有主表与从表，主表在left中是左侧表，right中是右侧表，主表数据会全部显示，从表数据则只显示关联部分匹配的数据，无匹配的数据用null补全
+内连接则只显示两表关联条件匹配的数据
+注：所谓关联条件即是指on的条件
+
+22、而是因表的特点而不同
+数据变化频繁的表还应该建立索引定期重建机制
+否则索引不但不会改善性能还会降低性能
+客户端
+import socket
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM) AF_INET指定使用IPV4协议，如果要用更先进的IPV6,就指定AF_INET6, SOCK_STREAM指定使用面向流的TCP协议
+s.connect(('www.sina.com.cn',80))
+s.send()
+buffer=[]
+while True:
+  d=s.recv(1024)
+  if d:
+     buffer.append(d)
+  else:
+     break
+  data=''.join(buffer)
+s.close()
+
+服务器
+s.bind('127.0.0.1',999)
+s.listen(5)
+while True:
+ sock,addr=s.accpt()
+ t=threading.Thread(target=toclink,args=(sock,addr))
+ t.start() s
+
+linux命令：
+系统信息 ：
+ cat /proc/cpuinfo显示cpu info的信息
+ cat /proc/interrupts显示中断
+ cat /proc/mounts
+ ls -F查看目录中的文件
+ ls -l显示文件和目录的详细资料
+ ls -a查看隐藏的文件
+ mkdir dir1创建一个叫做dir1的目录
+ mkdir dir1 dir2
+ rm -f file1删除一个叫做file1的文件
+ rmdir dir1删除一个叫做dir1的目录
+ rm -rf dir1删除一个叫做dir1的目录并同时删除其内容
+ rm -rf dir1 dir2同时删除两个目录及它们的内容
+ mv dir1 new_dir重命名/移动一个目录
+ cp file1 file2复制一个文件
+ cp dir/* .复制一个目录下的所有目录及它们的内容
+ In -s file1 Ink1创建一个指向文件或目录的软连接
+ In file1 lnk1 创建一个指向文件或目录的物理连接
+ find / -name file1从'/'开始进入根文件系统搜索文件和目录
+ find / -user user1 搜索属于用户'user1'的文件和目录
+ find / -home/user1 -name \*.bin 在目录'/home/user1'中搜索带有‘.bin’结尾的文件
+ locate \*.ps寻找以'.ps'结尾的文件
+ groupadd group_name创建一个新用户组
+ groupdel group_name删除一个用户组
+ groupmod -n new_group_name old_group_name重命名一个用户组
+ useradd user1创建一个新用户
+ userdel -r user1删除一个用户（'-r'排除主目录）
+ yum install package_name下载并安装一个rpm包
+ yum update package_name 更新一个rpm包
+ yum remove package_name 删除一个rpm包
+ yum list列出当前系统中安装的所有包
+ yum search package_name
+ apt-get install package_name安装 /更新一个deb包
+ apt-get update升级列表中的软件包
+ apt-get upgrade升级所有已安装的软件
+ apt-get remove package_name从系统删除一个deb包
+ apt-get check确认依赖的软件仓库正确
+ apt-get clean从下载的软件包中清理缓存
+ apt-cache search searched-package返回包含所有搜索字符串的软件包名称
+ cat file1从第一个字节开始正向查看文件的内容
+ tac file1从最后一行开始反向查看一件的内容
+ more file1查看一个文件的内容
+ head -2 file1查看一个文件的前两行
+ tail -2 file1查看一个文件的最后两行
+ 
+ ps ef | grep 进程名
+ kill 进程名
+ tar czvf 文件名 压缩
+ tar xzvf 文件名 解压缩
+ 
+ 
+apt-get install 
+atitude
+
+apt search
+
+ps grep 
+dkpg 
+
+   
+      
+
+                                                                                                  

@@ -1,0 +1,337 @@
+https://scrapy-chs.readthedocs.io/zh_CN/1.0/topics/webservice.html
+
+
+1 创建项目scrapy startproject projectname  重点
+2.重点
+tutorial/
+    scrapy.cfg
+    tutorial/
+        __init__.py
+        items.py
+        pipelines.py
+        settings.py
+        spiders/
+            __init__.py
+	 myspider.py  #自定义爬虫实现
+            ...
+这些文件分别是:
+
+scrapy.cfg: 项目的配置文件
+tutorial/: 该项目的python模块。之后您将在此加入代码。
+tutorial/items.py: 项目中的item文件.
+tutorial/pipelines.py: 项目中的pipelines文件.
+tutorial/settings.py: 项目的设置文件.
+tutorial/spiders/: 放置spider代码的目录.
+
+3.item  重点
+import scrapy
+class DmozItem(scrapy.Item):
+    title = scrapy.Field()
+    link = scrapy.Field()
+    desc = scrapy.Field()
+
+4.scrapy crawl dmoz  重点
+
+
+5.开始抓取， start_urls，start_requests  重点
+import scrapy
+class DmozSpider(scrapy.Spider):
+    name = "dmoz"
+    allowed_domains = ["dmoz.org"]
+    start_urls = [
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Books/",
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/"
+    ]
+
+    def parse(self, response):
+        filename = response.url.split("/")[-2]
+        with open(filename, 'wb') as f:
+            f.write(response.body)
+6.response.url当前连接  重点
+.response.body当前连接
+Selector有四个基本的方法(点击相应的方法可以看到详细的API文档):
+
+xpath(): 传入xpath表达式，返回该表达式所对应的所有节点的selector list列表 。
+css(): 传入CSS表达式，返回该表达式所对应的所有节点的selector list列表.
+extract(): 序列化该节点为unicode字符串并返回list。
+re(): 根据传入的正则表达式对数据进行提取，返回unicode字符串list列表。
+
+
+
+
+7.全局命令:  了解
+
+startproject
+settings
+runspider
+shell
+fetch
+view
+version
+项目(Project-only)命令:
+
+crawl
+check
+list
+edit
+parse
+genspider
+deploy
+bench
+
+
+8. 重点
+
+scrapy.Spider   股票，论坛
+Scrapy.request  连环跳
+
+
+CrawlSpider  百度百科
+ rules = (
+        # 提取匹配 'category.php' (但不匹配 'subsection.php') 的链接并跟进链接(没有callback意味着follow默认为True)
+        Rule(LinkExtractor(allow=('category\.php', ), deny=('subsection\.php', ))),
+
+        # 提取匹配 'item.php' 的链接并使用spider的parse_item方法进行分析
+        Rule(LinkExtractor(allow=('item\.php', )), callback='parse_item'),
+    )
+
+XMLFeedSpider 提取XML
+
+CSVFeedSpider 提取CSV
+
+SitemapSpider XML 站点提取
+
+
+
+9Item Loaders    了解
+默认从parse返回输入
+输出，指定
+
+自定义--一般不用，了解
+name = scrapy.Field(
+        input_processor=MapCompose(remove_tags),
+        output_processor=Join(),
+    )
+
+
+10.scrapy shell <url> 测试，数据抓取  重点
+
+
+11 pipline,去重，处理写入txt,数据库，json,xml  重点
+
+ def process_item(self, item, spider):
+	区分spider  
+	if  spider.name=="name":
+
+        	if item['id'] in self.ids_seen:#去重，保存
+            	raise DropItem("Duplicate item found: %s" % item)
+       	 	else:
+            	self.ids_seen.add(item['id'])
+        return item
+
+
+
+12.
+为了启用一个Item Pipeline组件，你必须将它的类添加到 ITEM_PIPELINES 配置，就像下面这个例子: 重点
+
+ITEM_PIPELINES = {
+    'myproject.pipelines.PricePipeline': 300,
+    'myproject.pipelines.JsonWriterPipeline': 800,
+}
+分配给每个类的整型值，确定了他们运行的顺序，item按数字从低到高的顺序，通过pipeline，通常将这些数字定义在0-1000范围内。
+
+
+
+13.scarpy crawl spider -o 1.xml  1.csv  1.json 1.txt  重点
+
+
+14.百度百科，抓取邮箱  重点
+Link Extractors
+
+
+
+15   了解
+Log levels
+Scrapy提供5层logging级别:
+
+CRITICAL - 严重错误(critical)
+ERROR - 一般错误(regular errors)
+WARNING - 警告信息(warning messages)
+INFO - 一般信息(informational messages)
+DEBUG - 调试信息(debugging messages)
+from scrapy import log
+log.msg("This is a warning", level=log.WARNING)
+
+
+
+16.每个爬虫抓取完成数据之后，信息存储   了解
+spider_stats
+保存了每个spider最近一次爬取的状态的字典(dict)。该字典以spider名字为键，值也是字典
+
+
+
+17.
+from scrapy.mail import MailSender  了解
+mailer = MailSender()
+或者您可以传递一个Scrapy设置对象，其会参考 settings:
+mailer = MailSender.from_settings(settings)
+这是如何来发送邮件了(不包括附件):
+mailer.send(to=["someone@example.com"], subject="Some subject", body="Some body", cc=["another@example.com"])
+
+
+18中间件--  重点
+模拟浏览器 --下载中间件
+代理
+selenium--spider中间件
+splash（不仅仅用selenium获取页面，还可以用splash）
+cookie
+不遵守协议
+配置多线程
+
+
+ 
+19   了解
+调试
+scarpy shell
+日志
+浏览器
+
+20.Spiders Contracts 单元测试   了解
+
+
+21运行爬虫的风格  了解
+from twisted.internet import reactor
+from scrapy.crawler import Crawler
+from scrapy import log, signals
+from testspiders.spiders.followall import FollowAllSpider
+from scrapy.utils.project import get_project_settings
+
+spider = FollowAllSpider(domain='scrapinghub.com')
+settings = get_project_settings()
+crawler = Crawler(settings)
+crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+crawler.configure()
+crawler.crawl(spider)
+crawler.start()
+log.start()
+reactor.run() # the script will block here until the spider_closed signal was sent
+
+
+一个进程运行多个爬虫
+from twisted.internet import reactor
+from scrapy.crawler import Crawler
+from scrapy import log
+from testspiders.spiders.followall import FollowAllSpider
+from scrapy.utils.project import get_project_settings
+
+def setup_crawler(domain):
+    spider = FollowAllSpider(domain=domain)
+    settings = get_project_settings()
+    crawler = Crawler(settings)
+    crawler.configure()
+    crawler.crawl(spider)
+    crawler.start()
+
+for domain in ['scrapinghub.com', 'insophia.com']:
+    setup_crawler(domain)
+log.start()
+reactor.run()
+
+
+
+22反爬虫   重点
+使用user agent池，轮流选择之一来作为user agent。池中包含常见的浏览器的user agent(google一下一大堆)
+禁止cookies(参考 COOKIES_ENABLED)，有些站点会使用cookies来发现爬虫的轨迹。
+设置下载延迟(2或更高)。参考 DOWNLOAD_DELAY 设置。
+如果可行，使用 Google cache 来爬取数据，而不是直接访问站点。
+使用IP池。例如免费的 Tor项目 或付费服务(ProxyMesh)。
+使用高度分布式的下载器(downloader)来绕过禁止(ban)，您就只需要专注分析处理页面。这样的例子有: Crawlera
+
+
+
+23通用爬虫  了解
+增加全局并发数:
+CONCURRENT_REQUESTS = 100
+
+
+禁止cookies:
+
+COOKIES_ENABLED = False
+
+
+禁止重试:
+retry_enabled
+RETRY_ENABLED = False
+
+减小下载超时:
+
+DOWNLOAD_TIMEOUT = 15
+
+关闭重定向:
+redirect_enabled
+REDIRECT_ENABLED = False
+
+#提取ajax
+
+AJAXCRAWL_ENABLED = True
+
+
+23.selenium+中间调用任何浏览器   重点
+
+24.不要再内存list,dict中存储数据，否则溢出  重点
+
+25ImagesPipeline存储图片  重点
+
+26Scrapyd 部署管理  重点
+
+
+27限制速度   了解
+autothrottle_enabled
+AUTOTHROTTLE_ENABLED
+
+默认: False
+
+启用AutoThrottle扩展。
+
+AUTOTHROTTLE_START_DELAY
+默认: 5.0
+
+初始下载延迟(单位:秒)。
+
+AUTOTHROTTLE_MAX_DELAY
+默认: 60.0
+
+在高延迟情况下最大的下载延迟(单位秒)。
+
+AUTOTHROTTLE_DEBUG
+默认: False
+
+起用AutoThrottle调试(debug)模式，展示每个接收到的response。 您可以通过此来查看限速参数是如何实时被调整的。
+
+
+28  scrapy bench测试最大并发   重点
+
+
+29  暂停继续   重点
+scrapy crawl somespider -s JOBDIR=crawls/somespider-1
+
+
+30拓展--自定义改造scraapy替换  了解
+
+
+31
+#针对当前爬虫的设置，不覆盖全局  了解
+    SETTINGS_PRIORITIES = {
+        'default': 0,
+        'command': 10,
+        'project': 20,
+        'cmdline': 40,
+    }
+
+
+
+32了解异常  了解
+
+
+
+

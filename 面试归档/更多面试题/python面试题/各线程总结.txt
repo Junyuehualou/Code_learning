@@ -1,0 +1,72 @@
+基础作业
+1.阳光问政（zhaopin,抓取岗位）-协程，线程，进程，分布式，
+并发读取，写入一个文件
+
+拓展作业
+
+2.淘宝订单抓取-协程，线程，进程，分布式，
+并发读取，写入一个文件
+
+
+3.分布式作业----淘宝A，淘宝B ,淘宝C 作业系统
+
+
+4.抓取网页的邮箱-----协程，线程，进程，分布式，
+协程：
+    gevent.monkey.patch_all()#自动切
+        tasklist=[]
+        for  i  in range(N):
+            tasklist.append( gevent.spawn(download,xclist[i],file))
+            gevent.joinall(tasklist)
+线程：
+
+        threadlist=[]
+    for  i  in range(N):
+        mythead=threading.Thread(target=download,args=(urllist,))
+        mythead.start()
+        threadlist.append(mythead) #加入线程列表
+    for  thd in  threadlist:
+        thd.join()
+
+进程：
+    import multiprocessing
+         queue.put(mygetstr)#压入数据
+     queue=multiprocessing.Queue()#进程之间传递数据
+     processlist = []
+        for i in range(N):
+            process=multiprocessing.Process(target=download,args=(xclist[i],queue))
+            process.start()
+            processlist.append(process)
+        print  "start"
+        for p  in processlist:
+           p.join()#等待所有进程退出
+        print  "okok"
+        time.sleep(5)
+        while  not  queue.empty():
+            data=queue.get()
+            print "get",data
+分布式：
+     sever,client
+
+并发读取：
+    queue= multiprocessing.Manager().Queue() #多进程
+    processlist = []
+    for urllist in  xclist:
+        process = multiprocessing.Process(target=go, args=(urllist, queue))
+        process.start()
+        processlist.append(process)  # 开启多个进程
+
+    readprocess=multiprocessing.Process(target=readdata,args=(queue,))#开启读取
+    readprocess.start()
+    processlist.append(readprocess)
+
+    for p in processlist:
+        p.join()  # 等待所有进程退出
+
+
+
+
+
+
+
+

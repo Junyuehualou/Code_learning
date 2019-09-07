@@ -1,0 +1,820 @@
+# -*- encoding: utf-8 -*-
+'''目录: python笔试/
+图片名
+    题目
+'''
+
+ACWM8074.jpg
+    (3) 请简单解释Python中static method（静态方法）和class method（类方法）。并将以下代码填写完整：
+        class A(object):
+            def foo(self, x):
+                print "executing foo(%s, %s)" % (self, x)
+
+            @classmethod
+            def class_foo(cls, x):
+                 rint "executing class_foo(%s, %s)" % (cls, x)
+
+            @staticmethod
+            def static_foo(x):
+                print "executing static_foo(%s)" % x
+
+            a = A()
+            # 调用foo函数，参数传入1
+            ________________________________
+
+            # 调用class_foo，参数传入1
+            ________________________________
+
+            # 调用static_foo，参数传入1
+            ________________________________
+
+    四、程序题
+    1、请写一改函数，用于替换某个字符串的一个或某几个字符串
+        函数原型strreplace(str, oldString, newString)
+        例如：
+        >>> pstr = "Hello World!";
+        >>> afterReplaceStr = strreplace(pstr, " World", " Tom");
+        那么afterReplaceStr的值为"Hello Tom!"
+
+
+AEJS9168.jpg
+    1. range 和 xrange区别
+    2. 举例交集和并集
+    3. type 和 instance 的区别
+    4. copy 和 deepcopy 的区别
+    5.
+        class A:
+            p = 1
+        class B(A):
+            pass
+        class C(A):
+            pass
+
+        1) print A.p, B.p, C.p
+        2)
+            B.p = 2
+            print A.p, B.p, C.p
+
+            
+AVKI5321.jpg
+    7. 请用python实现socket非阻塞通讯
+    8. 使用一个装饰器，查看函数的运行时间，`有什么作用
+    9. django的MTV分别代表什么
+
+
+BQXX7431.jpg
+    (8) 下列程序执行后的输出结果为：
+        x = 1; y = 2; z = 'a';
+        if x << 1 > 2:
+            print "X"
+        elif  x == 97:
+            print "Z"
+        else:
+            print "Y"
+        A、X    B、Y    C、Z    D、出错
+
+    二、不定项选择
+        (1) 下面的函数转换哪一个是正确的（语法均正确）：
+            A. int("ABcDef");
+            B. float('5')
+            C. bool((3, 5, 7))
+            D. str(5)
+
+        (2) 下面的函数，那些会输出1,2,3三个数字：
+            A.
+                for i in range(3):
+                    print i
+            B.
+                aList = [0, 1, 2]
+                for i in aList:
+                    print i+1
+            C.
+                i = 1
+                while i < 3:
+                    print i
+                    i = i + 1
+            D.
+                for i in range(3):
+                    print i + 1
+
+    三、填空题
+        (1) 以下函数需要在其中引入一个全局变量k，请填写语句：
+            def func():
+                ________________________
+                k = k + 1;
+
+        (2) 请把以下函数转化为Python Lambda匿名函数：
+            def add(x, y):
+                return x+y
+
+            ____________________________
+
+
+BVOV6679.jpg
+    4. 写一个函数，给定矩阵的长度级数n，返回一个回旋排列的数字矩阵。
+        例如：
+            n=2返回：
+                1 2
+                4 3
+            n=3返回：
+                1 2 3
+                8 9 4
+                7 6 5
+            n=4返回：
+                1   2   3   4
+                12  13  14  5
+                11  16  15  6
+                10  9   8   7
+
+
+DGWR3850.jpg
+    9. 请写出一段Python代码实现删除一个list里面的重复元素
+    10. 创建一个装饰器把下面函數輸出的字符串首字母大写。
+        def greetings(word="hi there"):
+            return word.lower()
+
+
+DNJB6571.jpg
+    2. 表达式 [1]*2 的值为（ ）
+        A. [2]
+        B. [1]
+        C. [1,1]
+        D. [1,2]
+    3. 已知列表x=[1,2,3]，那么执行语句x.inert(1,4)只有，x的值为（ ）
+        A. [1,2,3,4]
+        B. [1,4,2,3]
+        C. [4,3,2,1]
+        D. [4,2,3]
+    4. 已知字符串x='hello world'，那么执行语句x.replace('hello','hi')之后，x的值为（ ）
+        A. 'hello world'
+        B. 'hillo world'
+        C. 'hi world'
+        D. ' world'
+
+
+DOUW1999.jpg
+    ... （一个html文档）
+    要求爬取所有的公告名称，公告时间。编写程序解析段。
+
+
+EJAD2320.jpg
+    1. 请用python语言实现如下功能：
+        给定一个数组，其中该数组中的每个元素均为字符串，删除该数组中的空白字符串。 
+    2. 什么是异步调用？并请用一段简单的代码（不限语言）实现异步调用。
+    3. 简述Scrapy的框架（可做图说明），及各模块的基本功能，如果没有使用过Scrapy 框架，那么挑选一个你使用过的框架进行说明。
+    4. 请实现如下功能（不限语言）：给定一个无序的数值序列，找出其中第N大的数值。
+    5. 二选一：
+        5.1 开发问题：如何衡量两段文本的相识度？
+        5.2 开发问题：当你值爬取数据，遇到反爬时，解决思路是什么？
+
+
+FGEL4894.jpg
+    要求：
+        1. 不允许写伪代码，要求实现一个能运行的完整函数或方法
+        2. 不要使用任何语言或第三方类库自带的方法
+
+    必答题：
+        0. 定义一个哈系表的成员和方法
+
+    下面两题二选一：
+        1. 写出一个方法输出1～100之间所有的素数么（素数定义为在大于1的自然数中，除了1和它本身以外不再有其他因数，比如2,3,5都是素数，4,6都不是素数）
+        2. 计整数二进制表示中1的个数
+
+    下面两题二选一：
+        3. 给定一个整数数组，实现快速排序算法进行升序排序，比如：[2,5,8,9,3]排序后得到：[2,3,5,8,9]
+        4. 一个楼梯有N个台阶，小明从台阶最底层地面上楼梯，小明一次可最大跨3阶（也就是说每次迈步可以上1阶，2阶，或者3阶）。问小明爬上顶一共有多少中步伐组合？
+
+
+FMTN1281.jpg
+    三、算法题：
+        有两个特别大的手机号码文件，A文件包含100万个号码（每行1个手机号），B文件包含1000万个号码，请找出A，B文件中共有的手机号码。
+        （从算法和数据结构角度来思考，大数据量有性能要求，写清解决问题思路即可，可以不写详细代码）
+
+FRHK7905.jpg
+    聘请意向书
+
+FYUB1609.jpg
+    1. 有一张商品购买记录表T，其中包含字段uid（用户id），pid（商品id），现在要统计即购买了商品A（即pid为A）又购买了商品B（即pid为B）的用户uid。请写出对应的SQL语句。
+
+    2. 有两个有序整型数组：A和B，都是从小到大排序。要求把A和B合并成数组C，且C也是有序的。例如A=[1,3,5,7...]，B=[2,4,6,8...]。合并后C=[1,2,3,4,5,6,7,8...]。请写一个方法尽可能高效率的来实现（注：不调用系统提供的函数）。
+
+
+GDZI2530.jpg
+    1. 写出20个linux命令
+    2. 如何理解python中字符串中的\字符
+    3. 如何理解python中的深拷贝和浅拷贝
+    4. 列表中有n个正整数，范围在[0,1000]，请编程对列表中的数据排序。
+    5. 列表中有n对不重复的正整数，随机取出一个数字后，编程快速找到取出的数字。如：
+        [1,3,4,2,4,1,2,3] -> [1,3,4,2,1,2,3]
+
+
+GLYV6981.jpg
+    1. 利用Python执行shell命令并取得返回结果
+    2. 用python将‘123456’反转为'654321'
+    3. 利用python打印前一天的本地时间，格式为'2017-03-24 16:55:44'
+    4. python中search()和match()的区别
+    5. range和xrange的区别，以及各自的适用场景
+    6. 什么是lambda函数，有什么好处
+
+
+GYKR3955.jpg
+    1. 
+    2. 
+    3. 
+    4. 3+4j不是合法的Python表达式。（ ）
+    5. Python集合可以包含相同的元素。（ ）
+    6. 在UTF-8编码中一个汉字需要占用3个字节。（ ）
+    7. Python 3.x 支持使用中文作为变量名。（ ）
+    8. 函数中必须包含return语句。（ ）
+    9. 栈和队列的都具有先入后出的特点。（ ）
+    10. 定义类时实现类__eq__()方法，该类对象即可支持运算符==。（ ）
+
+    三、XPath解析题。
+        <?xml version="1.0" encoding="ISO-8859-1"?>
+        <bookstore>
+            <book>
+                <title lang="eng">Harry Potter</title>
+                <price>29.99</price>
+                <author>赵六</author>
+            </book>
+            <book>
+                <title lang="eng">Learning XML</title>
+                <price>39.95</price>
+                <author>张三</author>
+            </book>
+            <book>
+                <title lang="eng">ORACLE</title>
+                <price>40.32</price>
+                <author>Lary</author>
+            </book>
+        </bookstore>
+
+        写出表达式：
+            1. 选取bookstore元素中的book元素的所有title元素。其中的price必须大于35.00
+            2. 选取属于bookstore子元素的倒数第二个book元素
+            3. 选取属于bookstore元素的后代的所有book元素，而不管它们位于...下的什么位置。
+            4. 选取所有带有属性的title元素
+
+
+HOPD1716.jpg
+    一、单项选择题
+        (1) 以下叙述正确的是：
+            a. continue语句的作用是结束整个循环的执行
+            b. 只能在循环体内和switch语句体内使用break语句
+            c. 在循环体内使用break语句或continue语句的作用相同
+            d. 从多层循环嵌套中退出时，只能使用goto语句
+        (2) Python如何定义一个函数
+            a. class <name>(<Type> arg1, <Type> arg2, ..., <Type> argN)
+            b. function <name>(arg1, arg2, ..., argN)
+            c. def <name>(arg1, arg2, ..., argN)
+            d. def <name>(<Type> arg1, <Type> arg2, ..., <Type> argN)
+        (3) 下面哪个函数能够在linux环境下创建一个子进程：
+            a. os.popen
+            b. os.fork
+            c. os.system
+            d. os.link
+        (4) 已知x=43, ch='A', y=1，则表达式（x>=y and ch<'B' and y）的值是：
+            a. 0
+            b. 1
+            c. 出错
+            d. True("真")
+        (5) 下面的语句哪个会无限循环下去：
+            其中range函数原型为range([start], stop[, step])
+            a.
+                for a in range(10):
+                    time.sleep(10)
+            b.
+                while 1 < 10: 
+                    time.sleep(10)
+            c.
+                while True:
+                    break
+            d.
+                a = [3,-1,5,7]
+                for i in a[:]:
+                    if a > 10:
+                        break
+        (6) 下列表达式中返回为True的是：
+            a. 3 > 2 > 2
+            b. 'abc' > 'xyz'
+            c. 0x56 < 56
+            d. (3,2) < ('a','b')
+        (7) Python不支持的数据类型有：
+            a. char
+            b. int
+            c. float
+            d. list
+
+
+IBWF1980.jpg
+    2. 平衡点问题：
+        假如一个数组中的元素，其前面的部分等于后面的部分，那么这个点的位序就是平衡点。
+        比如一个列表 numbers =
+        [1,3,5,7,8,25,4,20]。25前面的总和为24，25后面的总和也是24，那么这个点就是平衡点。
+        要求编写程序，寻找并返回任意一个列表的平衡点。
+
+
+ICUW5311.jpg
+    同GYKR3955.jpg
+
+
+JMUQ1263.jpg
+    一个html表单源码。
+
+
+KEQO0150.jpg
+    10.  在django中定义了两个模型，书籍和作者，书籍有3个字段，分别是title，author，pulish_time；作者有3个字段，分别为name，age，address，其中书籍和作者是多对多的关系，查看一个书籍的所有作者和某个作者的全部书籍。
+    11. 简述你使用的web框架中是如何实现MVC模式的
+    12. 简述你熟悉的ORM框架的使用机制和实现原理
+
+
+KIGR0063.jpg
+    1. python中基本数据结构的操作
+                元组        列表        字典        集合
+        -------------------------------------------------------
+        定义
+        -------------------------------------------------------
+        新增
+        -------------------------------------------------------
+        更改
+        -------------------------------------------------------
+        删除
+
+    2. 下面代码执行后的结果：
+        def f(x, l=[]):
+            for i in range(x):
+                l.append(i*i)
+            print l
+        f(2)
+        f(3,[3,2,1])
+        f(3)
+
+    3. 请写出一段python代码实现删除一个list里面的重复
+
+    4. python代码得到列表list的交集与差集
+
+    5. __new__和__init__的区别
+
+    6. python中pass语句的作用是什么？
+
+    7. python里面如何生成随机数？
+
+    8. python里面search和match的区别
+
+    9. python函数中经常有*args, **kwargs这两个参数，它们是什么意思，为什么要使用它们？
+
+    10. 有两个序列a, b，大小都为n，序列元素的值任意整型数，无序。
+        要求：通过交换a,b中的元素，使[序列a元素的和]与[序列b元素的和]之间的差最小。
+
+    11. MyISAM和InnoDB的区别
+
+    12. 如何列出表'test'内name域值不为'tecmint'，web_address域值为'test.com'的所有数据？
+
+
+KQVM8135.jpg
+    同AVKI5321.jpg
+
+
+KTAC2428.jpg
+    1. 简述HTTP协议下，一个HTTP请求的数据结构。简述HTTP与HTTPS协议的差异。
+    2. 字典m={"a":1, "b":2}，请用代码完成key和value的交换。
+    3. 当前目录下有一个5G左右大小的文件，文件中，每行一条日志，格式如下：
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 12:12:12 "a=1&b=2&c=3"
+        2017-01-01 13:12:12 "a=1&b=2&c=3"
+        2017-01-01 13:12:12 "a=1&b=2&c=3"
+        2017-01-01 14:12:12 "a=1&b=2&c=3"
+        请利用你所掌握的语言，筛选出和"2017-01-01 13:12:12"有关的数据。
+    4. Python2和Python3的区别
+    5. 影响服务器请求QPS的核心问题有哪些？
+
+
+KVLS4399.jpg
+    10. 如何使用匿名函数
+    11. 何时使用标准库collections中的deque?
+    12. 标准库copy中的copy和deepcopy的区别
+    13. 标准库re正则表达式match和search区别
+    14. 使用正则表达式在 '''<OPTION value="待处理 ">待处理</OPTION>'''
+        字符串中，获取OPTION的value属性值。注意：OPTION中可能有其他的标签属性，
+        如：<OPTION a='x' value="待处理"> 或者 <OPTION value="待处理" b='y' >
+    15. 如何使用标准库pdb调试Python程序
+    16. 什么是装饰器，如何使用装饰器
+    17. 请解释with关键字的用法
+    18. 参数传递使用的是传递引用还是传递值？为什么？
+    19. 在类的方法定义中，'self'是怎样的一个参数
+    20. 说明CPython的内存管理机制
+
+
+MTNV0210.jpg
+    1. 使用python将字符串"1.2.3.4.5"转换为字符串"5|4|3|2|1"
+    2. 请分别描述Python2.x和Python3.x中，import包时的路径搜索顺序
+    3. 用Python的正则表达式匹配时间信息
+    4. 使用Python编写一个装饰器，打印被装饰函数的输入与输出
+    5. 阐述range和xrange的区别，并用Python仿写xrange函数
+    6. 列举几种你曾经常用的python包并且解释其功能以及用法
+
+
+NHXY2741.jpg
+    01. 什么是lambda函数？它有什么好处？另外python在函数编程方面提供了些什么函数与语法？
+    02. 详细说说tuple, list, dict的用法。它们的特点。
+    03. 说说python中装饰器、迭代器的用法。描述下dict的items()方法与iteritems()方法的不同。
+    04. Python是如何进行内存管理的？python的程序会内存泄漏吗？说说有没有什么方法防止及检测内存泄漏？
+    05. 关于python程序的运行性能方面，有什么手段能提升性能？
+    06. list对象
+        alist = [{'name':'a','age':20}, {'name':'b','age':30}, {'name':'c','age':25}]，
+        请按alist中元素的age由大到小排序
+    07. 两个list对象 
+        alist=['a','b','c','d','e','f']，
+        blist=['x','y','z','d','e','f'],
+        请用简洁的方法合并这2个list，并且list里面的元素不能重复。
+    08. 将字符串: "k:1|k1:2|k2:3|k3:4"，处理成python字段: {k:1, k1:2, ...}
+    09. 列举你使用过的python网络爬虫所用到的网络数据包（最熟悉的在前）
+    10. 列举你使用过的python网络爬虫所用到的解析数据包（最熟悉的在前）
+    11. 请举出三种常用的排序算法
+    12. 列出比较熟悉的爬虫框架
+    13. 写出在网络爬虫爬取数据过程中，遇到的反爬问题的解决方案
+    14. robots协议是什么？
+    15. http、https协议有什么区别？
+    16. 列举几个常用的dom解析项目、插件
+    17. 如何提高爬取效率
+    18. 有一个html文本字符串，让我取出<a href="提示我这个链接地址">sflkj</a>这个a标签里面的href的链接地址？
+    19. 下面是一个单线程的代码，请改写成多线程的：
+        start = 'http://google.com'
+        queue = [start]
+        visited = {start}
+        while queue: 
+            url = queue.pop(0)
+            print(url)
+            for next_url in extract_url(url):
+                if next_url not in visited:
+                    queue.append(next_url)
+                visited.add(next_url)
+    20. 如何爬取一个千亿级数据量查询系统的内容（每个查询都带有验证码功能），
+        请写出你的整体思路？
+
+
+NLCH3509.jpg
+    6. 请简述浏览器是如何获取一枚网页的。
+    7. 请写出可以一定程度判断网页是否变化的响应头。
+    8. 通过http服务器日志如何干掉恶意爬虫
+    9. 简述图片验证码的工作流程
+
+
+PXJE7884.jpg
+    In machine learning, naive Bayes classifiers are a family of simple probabilistic
+    classifiers based on applying Bayes' theorem with strong (naive) independence 
+    assumptions between the features.
+    Naive Bayes has been studied extensively since the 1950s. It was introduced under
+    a different name into the text retrieval community in the early 1960s, and remains
+    a popular (baseline) method for text categorization, the problem of judging
+    documents as belonging to one category or the other (such as spam or legitimate,
+    sports or politics, etc.) with word frequencies as the features. With appropriate
+    pre-processing, it is competitive in this domain with more advanced methods
+    including support vector machines. It also finds application in automatic medical
+    diagnosis.
+    Naive Bayes classifiers are highly scalable, requiring a number of parameters linear
+    in the number of variables (features/predictors) in a learning problem. Maximum-
+    likelihood training can be done by evaluating a closed-form expression, with
+    takes linear time, rather than by expensive iterative approximation as used for 
+    many other types of classifiers.
+    In the statistics and computer science literature, Naive Bayes models are known
+    under a variety of names, including simple Bayes and independence Bayes.  All
+    these names reference the use of Bayes' theorem in the classifier's decision rule,
+    but naive Bayes is not (necessarily) a Bayesian method.
+    
+    1. 请翻译该段文字
+    2. 如了解该算法，请写出算法对应的伪码
+
+
+QFVA5217.jpg
+    接 GYKR3955.jpg
+    
+    四、三、编程题目
+        http://www.ccgp-liaoning.gov.cn/login.do;jsessionid=zykRbp1pYmSLqwXhsKYJyhyDQ6Gv8TWVXhyZwZTKhSvd7ZgJpTJ9!971784726?method=beginlogin
+
+
+QMVT6611.jpg
+    同 KEQO0150.jpg
+
+
+QRKV1905.jpg
+    06. 场景：一个大于内存的txt日志文件，如果统计出某个字符出现的次数，请简述。
+    07. 场景：现有sever1, server2, server3三台消费者，生产者1通过api接口来调用，也就是说三台消费者都部署类api访问，请简述如何优化负载均衡。
+    08. 场景：股票行情源1不稳定，住要表现在获取所有股票行情的时候，有些股票会意外中断如timeout，请问如何优化程序。
+    09. 场景：股票行情获取两种方法：
+        1) 全量获取
+        2) 增量获取
+        现需获取前复权数据（如当天有复权，历史行情会变化），全量获取速度会比增量获取慢。
+        请问如何以最快速度获取股票行情。
+    10. 场景：根据字符串来筛选股票，并将股票从CSV中读取导入到程序中，并返回结果。简述如何更快的返回结果。
+
+
+RILC9864.jpg
+    1. tuple和list的区别
+    2. 这两个参数是什么意识：*args, **kwargs？我们为什么要使用它们？
+    3. python里面如何实现tuple和list的转换
+    4. python里面rang和xrange的区别
+    5. python里面copy和deepcopy的区别
+    6. python里面search()和match()的区别
+    7. python里面classmethod与staticmethod的区别
+    8. 如何反序输出序列，比如[2,6,5,3]，输出为[3,5,6,2]
+    9. 请写出一段python代码实现删除一个list里面的重复元素
+    10. 以下的代码的输出将是什么？说出你的答案并解释
+        class Parent(object):
+            x = 1
+
+        class Child1(Parent):
+            pass
+
+        class Child2(Parent):
+            pass
+
+        print Parent.x, Child1.x, Child2.x
+        Child1.x = 2
+        print Parent.x, Child1.x, Child2.x
+        Parent.x = 3
+        print Parent.x, Child1.x, Child2.x
+    11. python代码如何得到列表list的交集与差集
+        b1=[1,2,3]
+        b2=[2,3,4]
+    12. 请写一段代码输出1到100的和。
+    13. 在函数中使用global关键字声明全局变量
+    14. python正则表达式提取字符串中的数字
+        s = '12j33jk12ksdjfkj23jk4h1k23h'
+    15. 补充下面函数代码
+        def deco(func):
+            补充代码部分
+
+        @deco
+        def myfunc2(a,b):
+            print(" myfunc(%s, %s) called." % (a, b))
+            return a+b
+
+
+RLQS6879.jpg
+    一、Python类的简答题（任选10个，尽可能选择复杂的）
+        01. list和tuple的区别
+        02. list和dict两种结构的区别
+        03. 对list进行切片的用法
+        04. 对一个list去除重复项
+        05. 什么是lambda函数？它有什么好处？
+        06. 利用yield关键字的好处
+        07. 如何用python输出一个Fibonacci数列？
+        08. Python中pass语句的作用是什么？
+        09. 介绍以下except的用法和作用？
+        10. 介绍一下Python下range()函数和xrange()函数的用法及区别？
+        11. python里面search()和match()的区别？
+        12. 用Python匹配HTML tag的时候，<.*>和<.*?>有什么区别？
+        13. 利用正则表达式从一段html文本中提取多个字段值
+        14. Python里面如何生成随机数？
+        15. python如何定义一个函数？
+        16. 用两种方法按行读取一个csv文件
+        17. python如何实现单例模式？其它23种设计模式python如何实现？
+        18. 任意一种排序方法的代码实现（尽量选择时间复杂度是 O(NlogN) ）
+        19. 简述程序运行时间和时间复杂度的区别，并举例说明。
+    二、数据库
+        1. 简述数据库的锁机制
+        2. Mysql共有几种存储引擎，简述各自的特点。
+        3. 如何理解Mysql主从库架构
+    三、编程题（任选一题）
+        1. 读取文本文件info.txt（100万个商户名称），打印重复的商户名称及重复的次数，并按重复次数排序输出。
+        2. 写一个函数，能够遍历一个文件夹下的所有文件和子文件夹。
+
+
+SWZT5862.jpg
+    二、编程题（选用你最熟悉的语言如java, javascript, python, c++）
+        1. 有这样几个变量：
+            char    name[16]="小涛";
+            int     order=2;
+            float   score=90.5;
+            char    result[128];
+            请把name, order, score这几个变量按格式拼接，放到result里：
+                "小涛同学考试成绩为90.5，全班排第 2 名"
+            （注意变量类型转换，字符串拼接，或者用语言提供的特殊方法）
+
+        2. 实现一个字符串反转的函数
+            （例如：输入：'12345678'    输出：'87654321'）
+
+        3. 在扑克牌游戏中，需要实现一个查找顺子的算法：（连续的数字即为顺子）
+            随机发N张牌，从中挑选最长顺子，并返回其长度，如果没有顺子返回0
+            int cards[16] = {12,3,4,10,6,5,6,8,11,9,11,11,9,12,1};
+            int getMaxShunZiLength(int cards[], int cardlen) {...}
+            （对于上面给出的数据，应该返回最长顺子：8, 9, 10, 11, 12的长度5）
+
+
+TASF6751.jpg
+    同 DGWR3850.jpg
+
+
+TMBP7312.jpg
+    7. python判断变量类型时，判断一个变量的类型时为什么不使用type()，而是用isinstance()方法？
+    8. 写一个函数，输入一个字符串，返回倒序排列的结果。如：
+        string reverse('abcdef')，返回：'fedcba'
+    9. 请用自己的算法，按升序合并如下两个list，并去除重复的元素：
+        list1 = [2, 3, 8, 4, 9, 5, 6]
+        list2 = [5, 6, 10, 17, 11, 2]
+
+
+TPCV3678.jpg
+    7. 一个函数接受文件夹的名称作为输入参数，返回该文件夹中所有文件的全路径。请补充缺失的代码。
+        def print_directory_contents(sPath):
+
+    8. 阅读下面的代码，写出A0, A1至An的最终值
+        A0 = dict(zip(('a','b','c','d','e'),(1,2,3,4,5)))
+        A1 = range(10)
+        A2 = [i for i in A1 if i in A0]
+        A3 = [A0[s] for s in A0]
+        A4 = [i for i in A1 if i in A3]
+
+
+
+TRIZ2642.jpg
+    1. 填空题
+        (01) 获取随机数的方法：_________________
+        (02) JS中将一个变量强制改为浮点类型的方法：____________________
+        (03) 根据id获取元素的原生js方法：_____________________
+        (04) 将文档声明为HTML5文档类型，需要在文档头添加：________________
+        (05) Chrome浏览器的私有样式前缀：_____________________
+        (06) CSS3 设置圆角的属性名：________________________
+        (07) CSS3 中，#是根据________________来选择元素，.是根据_______________来选择元素。
+        (08) form标签特有的属性请列举三个：________、________、________。
+        (09) 正则表达式中，$是什么意识：________
+        (10) typeof'123'返回：________
+    2. 简答题
+        (1) 自定义一个浏览器兼容的事件绑定方法需要注意哪些问题？
+        (2) 设计一个布局方案，使得页面在pc端和pad端显示为一行三列，在手机端为一列三行。
+        (3) 请解释JSONP的工作原理。
+        (4) display和position都有哪些值？分别列举一下这些值的用途。
+        (5) 地址栏输入一个地址后，输入回车，描述一下这时开始，浏览器做类什么。
+    3. 应用题
+        (1) 创建一个js类，模拟实现方法的重载。
+        (2) js中也会有排序的需求，用js实现一个标准的排序算法，对某个数字数组进行由低到高的排序。
+    4. 编程题
+        用html, css和js模拟实现一个下拉框，使得下拉框在各个浏览器下的样式和行为完全一致。说出你的设计方案，并且重点说吗功能设计时要考虑的因素。
+
+
+UMYV5615.jpg
+    一、基础知识：
+        1. 在普通pc机上，这个数组大概站多大内存：int a[1000000]
+        2. 普通pc机上，1秒钟可进行多少次空的for循环，大概估计即可
+        3. 进程和线程之间有什么区别和联系？
+            做过多线程编程吗？线程加锁的作用是什么？
+        4. 写出下面程序的运行结果（32位机器）：
+            void func(char *str) {
+                printf("%d %d\n", sizeof(str), strlen(str));
+            }
+
+            main() {
+                char a[]="123456789";
+                printf("%d ", sizeof(a));
+                func(a);
+            }
+        5. 指定一个目录中，怎么查找文件名包含特定字符串的文件？
+            （用命令行或者其他方法）
+        6. 指定一个目录中，怎么查找内容包含特定字符串的文件？
+            （用命令行或者其他方法）
+        7. 在浏览器中输入www.baidu.com，从输入到页码显示出来，期间发生了哪些过程，详细描述一下（口述）
+        8. 谈一下你对设计模式的认识和理解，并简述几个你了解的设计模式（口述）
+
+
+UPXT9452.jpg
+    1. 如何判断一个python对象的类型？
+    2. Python里面如何生成随机数？
+    3. 请写出匹配ip的python正则表达式
+    4. 写尽可能多的str对象的方法
+    5. 全局变量与局部变量的区别，如何中function里面给一个全局变量赋值？
+    6. tuple和list区别，有两个list，b1=[1,2,3]，b2=[2,3,4]，写出合并代码
+    7. 请写出一段python代码实现删除一个list里面的重复元素。l = [1,1,2,3,4,5,4]
+    8. 写出如下list的交集与差集代码，b1=[1,2,3]，b2=[2,3,4]
+    9. 请写出一段python代码实现list里排序a=[1,2,4,2,4,5,7,10,5,5,7,8,9,0,3]
+
+
+UTSI4088.jpg
+    1. 简述TCP断开握手的过程
+    2. 简述 进程、线程、协程的含义。
+    3. 简述静态方法、类方法、实现方法的区别？
+    4. dict的items()方法与iteritems()方法的不同。
+    5. 请简述魔法函数__new__、__call__、__rper__、__str__、__setattr__、__getattr__的含义是什么？
+    6. django中如何读取和保存session，整个session的运行机制是什么？
+
+
+VFXA6549.jpg
+    以下的题目如果是编程题，则可以任选你擅长的语言即可，也可以直接写伪代码。
+    1. 进程和线程的区别是什么？
+    2. A1, A2, ..., An 为n个整数，编写一个程序求出其最大值。
+    3. 找到一个目录下（包含子目录），所有的以”盈码基金“开头的，文件名包含
+        今天的日期的文件（日期格式为yyyy-mm-dd）。注意：文件名的编码均为utf-8。
+    4.  有两个字符串s1和s2，我们称对字符串的一次添加/删除/修改一个字符为一次操作。
+        如果我们可以采用最少的操作次数，把s1变成s2，这个操作次数称为s1和s2
+        之间的编辑距离，表示为ed(s1, s2)。比如s1="abc"，s2="bcd"，ed(s1, s2)=2。
+        请编写一个程序求出两个字符串之间的编辑距离。
+
+
+VTQT2643.jpg
+    同 GLYV6981.jpg
+
+
+VVCU3059.jpg
+    13. 根据当前栏目ID，生成面包屑。
+        栏目表结构：
+        CREATE TABLE `cms_column` (
+                `column_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '栏目ID',
+                `column_name` varchar(45) DEFAULT NULL COMMENT '栏目名称',
+                `column_path` varchar(255) NOT NULL DEFAULT '/' COMMENT '栏目目录',
+                `parent_id` int(11) DEFAULT 'O' COMMENT '父ID',
+                `url` varchar(255) NOT NULL COMMENT `栏目URL',
+                PRIMARY KEY (`column_id`)
+                )
+        要求输出面包屑格式：    首页 > 一级栏目 > 二级栏目 > ... > 当前栏目
+    14. 写出获得学生成绩报表的sql语句，涉及的数据库表如下：
+        。班级表（表名：classes）：
+            class_id    class_name
+            ----------------------
+            1           1班
+            2           2班
+            3           4班
+
+        。课程表（表名：lesson）：
+            lesson_id   lesson_name
+            ----------------------
+            1           语文
+            2           数学
+            3           化学
+            4           物理
+
+        。学生表（表名：student）：
+            student_id  student_name    class_id
+            ------------------------------------
+            1           张三            1
+            2           李四            2
+            3           王强            1
+            4           李明            3
+
+        。成绩表（表名：scores）：
+            score_id    student_id      lesson_id   score
+            ---------------------------------------------
+            1           1               1           87
+            2           1               2           67
+            3           2               1           56
+            4           2               2           90
+            5           3               2           88
+            
+        结果要求：
+
+
+XOHT9171.jpg
+    11. MySQL中 delete from 表名 和truncate table 表名 的区别
+    12. 在MySQL中，要生成下列结果，SQL语句如何实现？
+        表名：com_result
+        表内容：
+            rq              shengfu
+            -------------------------
+            2017-04-09      胜
+            2017-04-09      胜
+            2017-04-09      负
+            2017-04-09      负
+            2017-04-10      胜
+            2017-04-10      负
+            2017-04-10      负
+        生成结果：
+            rq              胜      负
+            --------------------------
+            2017-04-09      2       2
+            2017-04-10      1       2
+
+
+YJXH6200.jpg
+    1. 列表(list)和元组(tuple)的区别
+    2. 集合(set)是怎样的一种数据类型，何时使用？
+    3. 请在下面的空白处填写运行结果
+        >>> seq = [1,2,3,4]
+        >>> seq[:2]
+        ________________________________________
+        >>> seq[-2:]
+        ________________________________________
+        >>> seq[10:]
+        ________________________________________
+        >>> seq[::-1]
+        ________________________________________
+        >>> seq[:]
+        ________________________________________
+        >>> id(seq[:]) == id(seq)
+        ________________________________________
+    4. 优化以下程序
+        result = []
+        for x in range(10):
+            result.append(x**2)
+        print(result)
+    5. 函数、类方法定义中如何实现可选参数、可选关键词参数
+    6. 请解释classmethod和staticmethod的区别
+    7. 请给出下列程序的运行结果
+        >>> x=0.5
+        >>> whild x!=1.0:
+        ...     print(x)
+        ...     x+=0.1
+    8. 请写一段程序，包含迭代器和生成器的使用
+    9. 请根据age分别对 student_tuples 及 student_objects进行排序
+        >>> student_tuples = [
+

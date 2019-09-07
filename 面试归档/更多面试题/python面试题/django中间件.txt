@@ -1,0 +1,163 @@
+ 中间件简介
+
+django 中的中间件（middleware），在django中，中间件其实就是一个类，在请求到来和结束后，django会根据自己的规则在合适的时机执行中间件中相应的方法。
+
+在django项目的settings模块中，有一个 MIDDLEWARE_CLASSES 变量，其中每一个元素就是一个中间件
+
+中间件中一共有五个方法：
+process_request(self,request)
+process_view(self, request, callback, callback_args, callback_kwargs)
+process_exception(self, request, exception)
+process_response(self, request, response）
+
+process_template_response(self,request,response)
+
+只有在视图函数的返回对象中有render方法才会执行！默认不执行
+
+并把对象的render方法的返回值返回给用户（注意不返回视图函数的return的结果了，而是返回视图函数 return值（对象）的render方法）
+  
+
+中间件之process_request，process_response
+
+process_request(self,request)
+
+process_response(self, request, response)
+
+当用户发起请求的时候会依次经过所有的的中间件，这个时候的请求时process_request,最后到达views的函数中，views函数处理后，在依次穿过中间件，
+这个时候是process_response,最后返回给请求者
+
+在django中叫中间件，在其他web框架中，有的叫管道，httphandle
+
+上述截图中的中间件都是django中的，我们也可以自己定义一个中间件，我们可以自己写一个类，但是必须继承MiddlewareMixin
+
+所以需要导入：from django.utils.deprecation import MiddlewareMixin
+
+我们在项目文件下创建一个Middle目录，并在下面创建m1.py代码例子如下：
+
+复制代码
+#AUTHOR:FAN
+from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import HttpResponse
+
+class Row1(MiddlewareMixin):
+    def process_request(self,request):
+        print("中间件1请求")
+    def process_response(self,request,response):
+        print("中间件1返回")
+        return response
+
+class Row2(MiddlewareMixin):
+    def process_request(self,request):
+        print("中间件2请求")
+        # return HttpResponse("走")
+    def process_response(self,request,response):
+        print("中间件2返回")
+        return response
+
+class Row3(MiddlewareMixin):
+    def process_request(self,request):
+        print("中间件3请求")
+    def process_response(self,request,response):
+        print("中间件3返回")
+        return response
+复制代码
+这样当页面发起请求的时候：后台效果如下
+中间件1请求
+中间件2请求
+中间件3请求
+中间件3返回
+中间件2返回
+中间件1返回
+
+
+但是如果当请求到达请求2的时候直接不符合条件返回，程序将吧请求直接发给中间件2返回，然后依次返回到请求者
+
+用如下图进行理解：
+
+
+
+当然这是在django1.10的时候，在之前的版本的时候是直接返回到最后一个中间件的response,然后向上依次返回，最后到发起请求
+
+中间件之process_view
+
+process_view(self, request, callback, callback_args, callback_kwargs)
+
+我们在m1.py文件中的的代码进行更改：
+
+复制代码
+#AUTHOR:FAN
+from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import HttpResponse
+
+class Row1(MiddlewareMixin):
+    def process_request(self,request):
+        print("中间件1请求")
+    def process_response(self,request,response):
+        print("中间件1返回")
+        return response
+
+    def process_view(self, request, callback, callback_args, callback_kwargs):
+        print("中间件1view")
+
+class Row2(MiddlewareMixin):
+    def process_request(self,request):
+        print("中间件2请求")
+        # return HttpResponse("走")
+    def process_response(self,request,response):
+        print("中间件2返回")
+        return response
+    def process_view(self, request, callback, callback_args, callback_kwargs):
+        print("中间件2view")
+
+class Row3(MiddlewareMixin):
+    def process_request(self,request):
+        print("中间件3请求")
+    def process_response(self,request,response):
+        print("中间件3返回")
+        return response
+    def process_view(self, request, callback, callback_args, callback_kwargs):
+        print("中间件3view")
+复制代码
+高亮部分为添加的内容，这样运行之后效果如下：
+
+中间件1请求
+中间件2请求
+中间件3请求
+中间件1view
+中间件2view
+中间件3view
+中间件3返回
+中间件2返回
+中间件1返回
+
+我们通过下图进行分析上面的过程：
+
+
+
+当最后一个中间的process_request到达路由关系映射之后，返回到中间件1的process_view，然后依次往下，到达views函数，最后通过process_response依次返回到达用户
+
+中间件之process_exception
+
+process_exception(self, request, exception)
+
+当views的函数中出现错误时，就会执行process_exception方法
+
+如果在中间中添加了process_exception方法，工作图示为：
+
+
+
+这样当用户发起请求的时候到达中间件3的process_request之后会到达urls路由关系映射这里，如果匹配到了就会到中间件1的process_view,
+然后依次传递到中间件3的process_view,到达view函数。
+如果view函数中有报错，则会从中间件3依次  ，
+这里即中间件3的process_response，然后依次返回到用户，如果没有匹配到这个错误则直接在页面显示错误信息。如果view函数中没有错误，
+则到中间3即最后一个中间件3的process_response，然后依次向上，传到用户
+
+中间件之process_template_responseprocess
+
+process_template_response(self,request,response)
+
+只有当views函数中返回的对象中具有render方法，是就会直接process_template_responseprocess
+
+ 
+
+所有的努力都值得期许，每一份梦想都应该灌溉！
